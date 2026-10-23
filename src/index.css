@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-line;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-base text-ink font-sans antialiased;
+    font-feature-settings: 'cv05' 1, 'ss03' 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Numeric readouts line up in tables and telemetry panels. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-ink font-semibold tracking-[-0.01em];
+  }
+
+  ::selection {
+    background: rgba(77, 155, 255, 0.3);
+  }
+
+  /* Focus ring: visible for keyboard users, never for mouse clicks. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary/70 ring-offset-2 ring-offset-base;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full border-[3px] border-solid border-transparent bg-line-strong bg-clip-content;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-faint bg-clip-content;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='range'] {
+    @apply h-1 w-full appearance-none rounded-full bg-line-strong;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    @apply h-3.5 w-3.5 appearance-none rounded-full bg-primary;
+    box-shadow: 0 0 0 3px rgba(77, 155, 255, 0.2);
+  }
+
+  /* Honour the accessibility requirement for a reduced-motion mode. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* min-w-0 matters: a grid or flex child defaults to min-width:auto, so a
+     wide child (a canvas, a chart's measured SVG, a long unbroken string)
+     props the whole column open and the page scrolls sideways. Panels are the
+     container almost everything sits in, so allowing them to shrink fixes that
+     class of bug once rather than page by page. */
+  .panel {
+    @apply min-w-0 rounded-card border border-line bg-surface shadow-panel;
+  }
+
+  .panel-inset {
+    @apply rounded-card border border-line bg-base/60;
+  }
+
+  .hairline {
+    @apply border-t border-line;
+  }
+
+  .label-caps {
+    @apply text-2xs font-semibold uppercase tracking-[0.11em] text-ink-faint;
+  }
+
+  .link {
+    @apply text-primary underline-offset-4 transition-colors hover:text-primary-bright hover:underline;
+  }
+
+  .starfield::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 18% 24%, rgba(255, 255, 255, 0.5), transparent),
+      radial-gradient(1px 1px at 72% 12%, rgba(255, 255, 255, 0.4), transparent),
+      radial-gradient(1px 1px at 41% 68%, rgba(255, 255, 255, 0.35), transparent),
+      radial-gradient(1.5px 1.5px at 88% 52%, rgba(255, 255, 255, 0.45), transparent),
+      radial-gradient(1px 1px at 9% 81%, rgba(255, 255, 255, 0.3), transparent),
+      radial-gradient(1px 1px at 55% 37%, rgba(255, 255, 255, 0.3), transparent),
+      radial-gradient(1px 1px at 31% 8%, rgba(255, 255, 255, 0.25), transparent),
+      radial-gradient(1px 1px at 64% 88%, rgba(255, 255, 255, 0.3), transparent);
+  }
+}
