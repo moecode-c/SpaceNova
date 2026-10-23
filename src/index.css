@@ -19,29 +19,48 @@
 
   body {
     @apply bg-base text-ink font-sans antialiased;
-    font-feature-settings: 'cv05' 1, 'ss03' 1;
+    /* Body tracking from the design system: 0.32px at 16px. */
+    letter-spacing: 0.02em;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Numeric readouts line up in tables and telemetry panels. */
-  .tnum {
+  /* Numeric readouts line up in tables and telemetry panels. The brand has no
+     monospace, so anything marked font-mono is the sans face with tabular
+     figures instead. */
+  .tnum,
+  .font-mono {
     font-variant-numeric: tabular-nums;
   }
 
+  /* Display type is uppercase, bold and positively tracked. The wide tracking
+     against tight leading is the typographic signature. */
   h1,
-  h2,
+  h2 {
+    @apply font-display font-bold uppercase text-ink;
+    letter-spacing: 0.02em;
+  }
+
   h3,
   h4 {
-    @apply text-ink font-semibold tracking-[-0.01em];
+    @apply font-sans font-bold uppercase text-ink tracking-cap;
+  }
+
+  /* Fixed-column text only: element-set lines, JSON, stack traces. */
+  pre,
+  code,
+  kbd,
+  samp {
+    @apply font-code;
+    letter-spacing: 0;
   }
 
   ::selection {
-    background: rgba(77, 155, 255, 0.3);
+    background: rgba(255, 255, 255, 0.28);
   }
 
   /* Focus ring: visible for keyboard users, never for mouse clicks. */
   :focus-visible {
-    @apply outline-none ring-2 ring-primary/70 ring-offset-2 ring-offset-base;
+    @apply outline-none ring-2 ring-white/80 ring-offset-2 ring-offset-black;
   }
 
   ::-webkit-scrollbar {
@@ -68,11 +87,10 @@
   }
 
   input[type='range'] {
-    @apply h-1 w-full appearance-none rounded-full bg-line-strong;
+    @apply h-px w-full appearance-none rounded-full bg-line-strong;
   }
   input[type='range']::-webkit-slider-thumb {
-    @apply h-3.5 w-3.5 appearance-none rounded-full bg-primary;
-    box-shadow: 0 0 0 3px rgba(77, 155, 255, 0.2);
+    @apply h-3.5 w-3.5 appearance-none rounded-full bg-ink;
   }
 
   /* Honour the accessibility requirement for a reduced-motion mode. */
@@ -94,38 +112,43 @@
      container almost everything sits in, so allowing them to shrink fixes that
      class of bug once rather than page by page. */
   .panel {
-    @apply min-w-0 rounded-card border border-line bg-surface shadow-panel;
+    @apply min-w-0 rounded-card border border-line-strong bg-surface;
   }
 
   .panel-inset {
-    @apply rounded-card border border-line bg-base/60;
+    @apply rounded-card border border-line bg-base;
   }
 
   .hairline {
     @apply border-t border-line;
   }
 
+  /* All-caps eyebrow text: micro-cap in the design system. */
   .label-caps {
-    @apply text-2xs font-semibold uppercase tracking-[0.11em] text-ink-faint;
+    @apply text-2xs font-semibold uppercase tracking-micro text-ink-faint;
   }
 
+  /* Inline links are white with a persistent underline. */
   .link {
-    @apply text-primary underline-offset-4 transition-colors hover:text-primary-bright hover:underline;
+    @apply text-ink underline decoration-ink/50 underline-offset-4 transition-colors hover:decoration-ink;
   }
 
+  /* A sparse white starfield: the only decoration on the black canvas. */
   .starfield::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
     background-image:
-      radial-gradient(1px 1px at 18% 24%, rgba(255, 255, 255, 0.5), transparent),
-      radial-gradient(1px 1px at 72% 12%, rgba(255, 255, 255, 0.4), transparent),
-      radial-gradient(1px 1px at 41% 68%, rgba(255, 255, 255, 0.35), transparent),
-      radial-gradient(1.5px 1.5px at 88% 52%, rgba(255, 255, 255, 0.45), transparent),
-      radial-gradient(1px 1px at 9% 81%, rgba(255, 255, 255, 0.3), transparent),
-      radial-gradient(1px 1px at 55% 37%, rgba(255, 255, 255, 0.3), transparent),
-      radial-gradient(1px 1px at 31% 8%, rgba(255, 255, 255, 0.25), transparent),
-      radial-gradient(1px 1px at 64% 88%, rgba(255, 255, 255, 0.3), transparent);
+      radial-gradient(1px 1px at 18% 24%, rgba(255, 255, 255, 0.55), transparent),
+      radial-gradient(1px 1px at 72% 12%, rgba(255, 255, 255, 0.45), transparent),
+      radial-gradient(1px 1px at 41% 68%, rgba(255, 255, 255, 0.4), transparent),
+      radial-gradient(1.5px 1.5px at 88% 52%, rgba(255, 255, 255, 0.5), transparent),
+      radial-gradient(1px 1px at 9% 81%, rgba(255, 255, 255, 0.35), transparent),
+      radial-gradient(1px 1px at 55% 37%, rgba(255, 255, 255, 0.35), transparent),
+      radial-gradient(1px 1px at 31% 8%, rgba(255, 255, 255, 0.3), transparent),
+      radial-gradient(1px 1px at 64% 88%, rgba(255, 255, 255, 0.35), transparent),
+      radial-gradient(1px 1px at 93% 22%, rgba(255, 255, 255, 0.3), transparent),
+      radial-gradient(1px 1px at 4% 46%, rgba(255, 255, 255, 0.3), transparent);
   }
 }
