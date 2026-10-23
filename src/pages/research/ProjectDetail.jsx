@@ -301,7 +301,7 @@ export default function ProjectDetail() {
                 header: 'Parameters',
                 nowrap: false,
                 hideBelow: 'lg',
-                render: (q) => <code className="font-mono text-2xs text-ink-faint">{q.json}</code>,
+                render: (q) => <code className="font-code text-2xs text-ink-faint">{q.json}</code>,
               },
               { key: 'lastRowCount', header: 'Last rows', align: 'right', mono: true, render: (q) => num(q.lastRowCount) },
               { key: 'lastRunAt', header: 'Last run', mono: true, hideBelow: 'md', render: (q) => age(q.lastRunAt) },

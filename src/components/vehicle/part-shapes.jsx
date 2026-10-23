@@ -26,13 +26,13 @@ import { cn } from '../../lib/cn.js';
  * something is round rather than flat.
  */
 const PART_EDGE = {
-  tank: '#8aa6c4',
-  booster: '#8aa6c4',
-  interstage: '#6c7f98',
-  adapter: '#6c7f98',
-  fairing: '#c89098',
-  payload: '#7fb3d8',
-  engine: '#9aa7b8',
+  tank: '#a1a7ad',
+  booster: '#a1a7ad',
+  interstage: '#7e8186',
+  adapter: '#7e8186',
+  fairing: '#b2a6a8',
+  payload: '#a3adb4',
+  engine: '#a6a9ac',
 };
 
 const PART_FILL = {
@@ -72,44 +72,44 @@ export function PartDefs({ prefix }) {
       {/* Lit cylinder: the bright band sits left of centre, as if the light
           came from the upper left. */}
       <linearGradient id={`${prefix}-cylinder`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#24354b" />
-        <stop offset="28%" stopColor="#6d89a9" />
-        <stop offset="48%" stopColor="#8fa9c6" />
-        <stop offset="78%" stopColor="#3d5370" />
-        <stop offset="100%" stopColor="#1d2b3e" />
+        <stop offset="0%" stopColor="#34373b" />
+        <stop offset="28%" stopColor="#858b91" />
+        <stop offset="48%" stopColor="#a5aab0" />
+        <stop offset="78%" stopColor="#51565c" />
+        <stop offset="100%" stopColor="#2a2d31" />
       </linearGradient>
       <linearGradient id={`${prefix}-interstage`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#1a2433" />
-        <stop offset="30%" stopColor="#42546c" />
-        <stop offset="50%" stopColor="#56687f" />
-        <stop offset="80%" stopColor="#273549" />
-        <stop offset="100%" stopColor="#141d29" />
+        <stop offset="0%" stopColor="#242629" />
+        <stop offset="30%" stopColor="#53565b" />
+        <stop offset="50%" stopColor="#666a6f" />
+        <stop offset="80%" stopColor="#35373b" />
+        <stop offset="100%" stopColor="#1c1e21" />
       </linearGradient>
       <linearGradient id={`${prefix}-fairing`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#3c2228" />
-        <stop offset="28%" stopColor="#95666d" />
-        <stop offset="48%" stopColor="#b5848a" />
-        <stop offset="78%" stopColor="#5e373d" />
-        <stop offset="100%" stopColor="#2e1a1f" />
+        <stop offset="0%" stopColor="#322c2e" />
+        <stop offset="28%" stopColor="#82797a" />
+        <stop offset="48%" stopColor="#a19899" />
+        <stop offset="78%" stopColor="#4e4748" />
+        <stop offset="100%" stopColor="#262223" />
       </linearGradient>
       <linearGradient id={`${prefix}-payload`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#17304a" />
-        <stop offset="35%" stopColor="#3f6f9e" />
-        <stop offset="55%" stopColor="#5288ba" />
-        <stop offset="85%" stopColor="#1e3b58" />
-        <stop offset="100%" stopColor="#122536" />
+        <stop offset="0%" stopColor="#2b3036" />
+        <stop offset="35%" stopColor="#656f78" />
+        <stop offset="55%" stopColor="#7c8690" />
+        <stop offset="85%" stopColor="#353b41" />
+        <stop offset="100%" stopColor="#202428" />
       </linearGradient>
       <linearGradient id={`${prefix}-metal`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#222a35" />
-        <stop offset="30%" stopColor="#707e90" />
-        <stop offset="52%" stopColor="#8c99a9" />
-        <stop offset="80%" stopColor="#39434f" />
-        <stop offset="100%" stopColor="#1b2129" />
+        <stop offset="0%" stopColor="#2a2b2d" />
+        <stop offset="30%" stopColor="#7d8083" />
+        <stop offset="52%" stopColor="#989a9d" />
+        <stop offset="80%" stopColor="#424446" />
+        <stop offset="100%" stopColor="#212223" />
       </linearGradient>
       <linearGradient id={`${prefix}-flame`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#8fb8ff" stopOpacity="0.9" />
-        <stop offset="60%" stopColor="#4d9bff" stopOpacity="0.35" />
-        <stop offset="100%" stopColor="#4d9bff" stopOpacity="0" />
+        <stop offset="0%" stopColor="#f0f0fa" stopOpacity="0.9" />
+        <stop offset="60%" stopColor="#ffffff" stopOpacity="0.35" />
+        <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
       </linearGradient>
     </defs>
   );
@@ -177,7 +177,7 @@ export function PartShape({ part, cx, yTop, yBottom, w, wBelow, wParent, selecte
   const paint = paintFor(part.kind, prefix);
   const h = Math.max(1, yBottom - yTop);
   const half = w / 2;
-  const stroke = selected ? '#7db6ff' : paint.edge;
+  const stroke = selected ? '#f0f0fa' : paint.edge;
   const strokeWidth = selected ? 1.6 : 0.7;
   const opacity = ghost ? 0.45 : 1;
 
@@ -199,7 +199,7 @@ export function PartShape({ part, cx, yTop, yBottom, w, wBelow, wParent, selecte
             y1={yTop + h * 0.08}
             x2={cx}
             y2={yBottom}
-            stroke="#2a1419"
+            stroke="#211d1e"
             strokeWidth="0.6"
             opacity={opacity * 0.8}
             vectorEffect="non-scaling-stroke"
@@ -228,7 +228,7 @@ export function PartShape({ part, cx, yTop, yBottom, w, wBelow, wParent, selecte
             y1={yTop + 0.5}
             x2={cx + half}
             y2={yTop + 0.5}
-            stroke="#7db6ff"
+            stroke="#f0f0fa"
             strokeWidth="1"
             strokeDasharray="3 2"
             opacity={opacity * 0.75}
@@ -242,7 +242,7 @@ export function PartShape({ part, cx, yTop, yBottom, w, wBelow, wParent, selecte
                 y1={yTop + h * f}
                 x2={cx + half}
                 y2={yTop + h * f}
-                stroke="#0d131d"
+                stroke="#131517"
                 strokeWidth="0.5"
                 opacity={opacity * 0.6}
                 vectorEffect="non-scaling-stroke"
@@ -274,7 +274,7 @@ export function PartShape({ part, cx, yTop, yBottom, w, wBelow, wParent, selecte
                 y1={yTop + h * f}
                 x2={cx + half * 0.72}
                 y2={yTop + h * f}
-                stroke="#0e2235"
+                stroke="#1e2225"
                 strokeWidth="0.5"
                 opacity="0.7"
                 vectorEffect="non-scaling-stroke"
@@ -354,7 +354,7 @@ export function PartShape({ part, cx, yTop, yBottom, w, wBelow, wParent, selecte
                 y1={yTop + h * f}
                 x2={cx + half}
                 y2={yTop + h * f}
-                stroke="#101a26"
+                stroke="#191b1d"
                 strokeWidth="0.5"
                 opacity={opacity * 0.55}
                 vectorEffect="non-scaling-stroke"

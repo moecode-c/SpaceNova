@@ -346,7 +346,7 @@ export default function DatasetDetail() {
       <Section title="Citation block" description="What an export of this snapshot carries at the top of the file.">
         <Panel>
           <PanelBody padded={false}>
-            <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-4 font-mono text-2xs leading-relaxed text-ink-dim">
+            <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-4 font-code text-2xs leading-relaxed text-ink-dim">
               {citation}
             </pre>
           </PanelBody>

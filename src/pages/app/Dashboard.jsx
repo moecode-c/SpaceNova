@@ -328,7 +328,7 @@ export default function Dashboard() {
                   footprintAngleDeg: s.footprintAngleDeg,
                   eclipsed: s.eclipsed,
                 }))}
-              tracks={tracks.map((t) => ({ ...t, colour: '#4d9bff' }))}
+              tracks={tracks.map((t) => ({ ...t, colour: '#ffffff' }))}
               observer={{ ...observer, name: activeLocation.name }}
               showFootprints={false}
               showLabels={false}

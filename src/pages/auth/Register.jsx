@@ -46,7 +46,7 @@ export default function Register() {
   return (
     <div className="space-y-6">
       <header className="space-y-1.5">
-        <h1 className="text-xl font-semibold tracking-[-0.02em] text-ink">Create an account</h1>
+        <h1 className="text-2xl leading-[1.1] text-ink">Create an account</h1>
         <p className="text-sm text-ink-dim">
           New accounts are Observers. The Researcher and Engineer roles are requested afterwards and
           approved by an administrator.

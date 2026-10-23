@@ -377,7 +377,7 @@ export default function VehicleBuilder() {
   return (
     <div className="flex h-full flex-col bg-base">
       {/* ================= heads-up strip ================= */}
-      <header className="flex shrink-0 items-center gap-3 border-b border-line bg-surface/60 px-3 py-2 backdrop-blur">
+      <header className="flex shrink-0 items-center gap-3 border-b border-line bg-surface/60 px-3 py-2">
         <div className="flex min-w-0 shrink-0 items-center gap-1.5">
           <Button
             size="xs"
@@ -387,7 +387,7 @@ export default function VehicleBuilder() {
             aria-label={showLibrary ? 'Hide the component library' : 'Show the component library'}
           />
           <Blocks size={15} className="shrink-0 text-primary" aria-hidden />
-          <h1 className="truncate text-sm font-semibold text-ink">Vehicle builder</h1>
+          <h1 className="truncate font-sans text-cap text-ink">Vehicle builder</h1>
         </div>
 
         {verdict && (
@@ -492,7 +492,7 @@ export default function VehicleBuilder() {
         <aside
           className={cn(
             'absolute inset-y-0 left-0 z-20 w-[19rem] shrink-0 flex-col border-r border-line',
-            'bg-surface shadow-pop lg:static lg:z-auto lg:bg-surface/30 lg:shadow-none',
+            'bg-surface lg:static lg:z-auto lg:bg-surface/30',
             showLibrary ? 'flex' : 'hidden',
           )}
         >
@@ -559,7 +559,7 @@ export default function VehicleBuilder() {
           {/* The selected part floats over the pad rather than pushing it
               around, so the view never jumps while you are working. */}
           {selected && (
-            <div className="absolute bottom-3 left-3 w-[19rem] max-w-[calc(100%-1.5rem)] rounded-card border border-line-strong bg-void/95 shadow-pop backdrop-blur">
+            <div className="absolute bottom-3 left-3 w-[19rem] max-w-[calc(100%-1.5rem)] rounded-card border border-line-strong bg-void/95">
               <div className="flex items-start gap-2 border-b border-line/70 p-2.5">
                 <div className="shrink-0 rounded border border-line/70 bg-base/60 p-0.5">
                   <PartGlyph component={selected} />
@@ -671,7 +671,7 @@ export default function VehicleBuilder() {
         <aside
           className={cn(
             'absolute inset-y-0 right-0 z-20 w-[21rem] shrink-0 flex-col border-l border-line',
-            'bg-surface shadow-pop xl:static xl:z-auto xl:bg-surface/30 xl:shadow-none',
+            'bg-surface xl:static xl:z-auto xl:bg-surface/30',
             showAnalysis ? 'flex' : 'hidden',
           )}
         >

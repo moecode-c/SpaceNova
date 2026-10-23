@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Line, LineChart,
   ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -16,29 +15,32 @@ import { SourceTag } from './source.jsx';
  * greyscale as well as in colour.
  */
 export const SERIES = {
-  primary: '#4d9bff',
-  good: '#2fbf8f',
-  warn: '#e0a03a',
-  bad: '#e8605f',
-  info: '#8b7bf0',
-  muted: '#6c7a91',
+  primary: '#ffffff',
+  good: '#3fd49b',
+  warn: '#e8ac4a',
+  bad: '#f0706f',
+  info: '#d2d2e6',
+  muted: '#86868f',
 };
 
 export const SERIES_ORDER = [SERIES.primary, SERIES.good, SERIES.warn, SERIES.info, SERIES.bad, SERIES.muted];
 
+// Chart text is the brand face, with tabular figures so tick labels stay put.
+const FONT = 'Barlow, "D-DIN", Arial, sans-serif';
+
 const AXIS = {
-  stroke: '#27344a',
-  tick: { fill: '#6c7a91', fontSize: 10, fontFamily: '"JetBrains Mono", monospace' },
+  stroke: '#3a3a3f',
+  tick: { fill: '#86868f', fontSize: 10, fontFamily: FONT },
   tickLine: false,
 };
 
-const GRID = { stroke: '#1c2636', strokeDasharray: '2 4', vertical: false };
+const GRID = { stroke: '#232326', strokeDasharray: '2 4', vertical: false };
 
 /** Shared tooltip. Values are formatted by the caller so units stay correct. */
 export function ChartTooltip({ active, payload, label, formatLabel, formatValue, unit }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-line-strong bg-raised/95 px-2.5 py-2 shadow-pop backdrop-blur">
+    <div className="rounded-card border border-line-strong bg-raised px-2.5 py-2">
       {label !== undefined && (
         <p className="tnum mb-1 font-mono text-2xs text-ink-faint">
           {formatLabel ? formatLabel(label) : label}
@@ -129,27 +131,9 @@ export function TimeSeries({
   const Chart = hasArea ? AreaChart : LineChart;
   const hasRight = series.some((s) => s.axis === 'right');
 
-  const gradients = useMemo(
-    () =>
-      series
-        .filter((s) => s.area)
-        .map((s) => ({ id: `grad-${s.key}`, colour: s.colour ?? SERIES.primary })),
-    [series],
-  );
-
   return (
     <ResponsiveContainer width="100%" height={height}>
       <Chart data={data} margin={{ top: 6, right: hasRight ? 6 : 10, bottom: 0, left: -12 }}>
-        {gradients.length > 0 && (
-          <defs>
-            {gradients.map((g) => (
-              <linearGradient key={g.id} id={g.id} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={g.colour} stopOpacity={0.3} />
-                <stop offset="100%" stopColor={g.colour} stopOpacity={0.02} />
-              </linearGradient>
-            ))}
-          </defs>
-        )}
         {showGrid && <CartesianGrid {...GRID} />}
         <XAxis
           dataKey={xKey}
@@ -186,7 +170,7 @@ export function TimeSeries({
               unit={unit}
             />
           }
-          cursor={{ stroke: '#27344a', strokeWidth: 1 }}
+          cursor={{ stroke: '#3a3a3f', strokeWidth: 1 }}
         />
         {referenceAreas.map((area) => (
           <ReferenceArea
@@ -217,7 +201,7 @@ export function TimeSeries({
                     position: line.position ?? 'insideTopRight',
                     fill: line.colour ?? SERIES.muted,
                     fontSize: 9,
-                    fontFamily: '"JetBrains Mono", monospace',
+                    fontFamily: FONT,
                   }
                 : undefined
             }
@@ -233,7 +217,8 @@ export function TimeSeries({
               name={s.name}
               stroke={s.colour ?? SERIES_ORDER[i % SERIES_ORDER.length]}
               strokeWidth={1.6}
-              fill={`url(#grad-${s.key})`}
+              fill={s.colour ?? SERIES_ORDER[i % SERIES_ORDER.length]}
+              fillOpacity={0.1}
               dot={false}
               activeDot={{ r: 2.5, strokeWidth: 0 }}
               connectNulls={false}
@@ -313,11 +298,11 @@ export function BarSeries({
               position: 'insideTopRight',
               fill: line.colour ?? SERIES.warn,
               fontSize: 9,
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: FONT,
             }}
           />
         ))}
-        <Bar dataKey={yKey} name={name} radius={[2, 2, 0, 0]} barSize={barSize}>
+        <Bar dataKey={yKey} name={name} radius={0} barSize={barSize}>
           {data.map((row, i) => (
             <Cell key={i} fill={colourFor ? colourFor(row) : SERIES.primary} />
           ))}
@@ -330,23 +315,17 @@ export function BarSeries({
 /** Tiny inline trend line, for table cells and stat tiles. */
 export function Sparkline({ data, dataKey = 'value', colour = SERIES.primary, height = 28, width = 96, area = true }) {
   if (!data || data.length < 2) return <span className="text-2xs text-ink-faint">&mdash;</span>;
-  const id = `spark-${dataKey}-${Math.round(Math.random() * 1e6)}`;
   return (
     <div style={{ width, height }}>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 2, right: 0, bottom: 2, left: 0 }}>
-          <defs>
-            <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={colour} stopOpacity={0.35} />
-              <stop offset="100%" stopColor={colour} stopOpacity={0} />
-            </linearGradient>
-          </defs>
           <Area
             type="monotone"
             dataKey={dataKey}
             stroke={colour}
             strokeWidth={1.3}
-            fill={area ? `url(#${id})` : 'none'}
+            fill={area ? colour : 'none'}
+            fillOpacity={0.12}
             dot={false}
             isAnimationActive={false}
           />
@@ -371,7 +350,7 @@ export function RankedBars({ rows, valueKey = 'value', labelKey = 'label', forma
           </div>
           <div className="h-1 w-full overflow-hidden rounded-full bg-overlay">
             <div
-              className="h-full rounded-full bg-primary/70"
+              className="h-full rounded-full bg-primary"
               style={{ width: `${(row[valueKey] / max) * 100}%` }}
             />
           </div>

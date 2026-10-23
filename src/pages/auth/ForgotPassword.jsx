@@ -22,7 +22,7 @@ export default function ForgotPassword() {
           <MailCheck size={20} aria-hidden />
         </span>
         <div className="space-y-1.5">
-          <h1 className="text-xl font-semibold text-ink">Check your inbox</h1>
+          <h1 className="text-2xl leading-[1.1] text-ink">Check your inbox</h1>
           <p className="text-sm leading-relaxed text-ink-dim">
             If an account exists for <span className="text-ink">{email}</span>, a single-use reset
             link is on its way. The link expires, and using it invalidates it.
@@ -54,7 +54,7 @@ export default function ForgotPassword() {
         <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-primary">
           <KeyRound size={20} aria-hidden />
         </span>
-        <h1 className="pt-2 text-xl font-semibold tracking-[-0.02em] text-ink">
+        <h1 className="pt-2 text-2xl leading-[1.1] text-ink">
           Reset your password
         </h1>
         <p className="text-sm leading-relaxed text-ink-dim">

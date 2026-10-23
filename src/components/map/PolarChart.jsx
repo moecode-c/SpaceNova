@@ -78,14 +78,7 @@ export function PolarPassChart({
       role="img"
       aria-label="Sky plot of the pass, azimuth around and elevation from the rim to the centre"
     >
-      <defs>
-        <radialGradient id="skyFill" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#0d1420" />
-          <stop offset="100%" stopColor="#070c15" />
-        </radialGradient>
-      </defs>
-
-      <circle cx={centre} cy={centre} r={radius} fill="url(#skyFill)" stroke="#27344a" strokeWidth="1" />
+      <circle cx={centre} cy={centre} r={radius} fill="#050505" stroke="#3a3a3f" strokeWidth="1" />
 
       {/* Elevation rings. */}
       {[30, 60].map((elevation) => (
@@ -95,13 +88,13 @@ export function PolarPassChart({
             cy={centre}
             r={radius * (1 - elevation / 90)}
             fill="none"
-            stroke="#1c2636"
+            stroke="#232326"
             strokeWidth="0.8"
           />
           <text
             x={centre + 3}
             y={centre - radius * (1 - elevation / 90) - 3}
-            className="fill-[#6c7a91] font-mono text-[8px]"
+            className="fill-[#86868f] font-mono text-[8px]"
           >
             {elevation}&deg;
           </text>
@@ -114,7 +107,7 @@ export function PolarPassChart({
         cy={centre}
         r={radius * (1 - minElevation / 90)}
         fill="none"
-        stroke="#e0a03a"
+        stroke="#e8ac4a"
         strokeOpacity="0.45"
         strokeWidth="0.9"
         strokeDasharray="3 3"
@@ -130,7 +123,7 @@ export function PolarPassChart({
             y1={centre}
             x2={x}
             y2={y}
-            stroke="#1c2636"
+            stroke="#232326"
             strokeWidth="0.7"
           />
         );
@@ -138,7 +131,7 @@ export function PolarPassChart({
 
       {/* Horizon obstruction mask. */}
       {maskPath && (
-        <path d={maskPath} fill="#e8605f" fillOpacity="0.14" stroke="#e8605f" strokeOpacity="0.4" strokeWidth="0.7" fillRule="evenodd" />
+        <path d={maskPath} fill="#f0706f" fillOpacity="0.14" stroke="#f0706f" strokeOpacity="0.4" strokeWidth="0.7" fillRule="evenodd" />
       )}
 
       {/* Cardinal labels. */}
@@ -153,7 +146,7 @@ export function PolarPassChart({
             x={centre + r * Math.cos(theta)}
             y={centre + r * Math.sin(theta) + 3.5}
             textAnchor="middle"
-            className="fill-[#a3b0c4] text-[10px] font-semibold"
+            className="fill-[#c4c4cc] text-[10px] font-semibold"
           >
             {label}
           </text>
@@ -166,7 +159,7 @@ export function PolarPassChart({
           key={i}
           points={run.points.map((p) => project(p.azimuth, p.elevation).join(',')).join(' ')}
           fill="none"
-          stroke={run.illuminated ? '#e0a03a' : '#4d9bff'}
+          stroke={run.illuminated ? '#e8ac4a' : '#ffffff'}
           strokeWidth={run.illuminated ? 2.2 : 1.6}
           strokeDasharray={run.illuminated ? undefined : '4 3'}
           strokeLinecap="round"
@@ -174,26 +167,26 @@ export function PolarPassChart({
       ))}
 
       {/* Markers. */}
-      {aos && <Marker point={project(aos.azimuth, aos.elevation)} colour="#2fbf8f" label="AOS" />}
-      {los && <Marker point={project(los.azimuth, los.elevation)} colour="#e8605f" label="LOS" />}
-      {tca && <Marker point={project(tca.azimuth, tca.elevation)} colour="#e8edf6" label="TCA" filled />}
+      {aos && <Marker point={project(aos.azimuth, aos.elevation)} colour="#3fd49b" label="AOS" />}
+      {los && <Marker point={project(los.azimuth, los.elevation)} colour="#f0706f" label="LOS" />}
+      {tca && <Marker point={project(tca.azimuth, tca.elevation)} colour="#ffffff" label="TCA" filled />}
       {highlighted && (
         <circle
           cx={project(highlighted.azimuth, highlighted.elevation)[0]}
           cy={project(highlighted.azimuth, highlighted.elevation)[1]}
           r="4.5"
-          fill="#4d9bff"
-          stroke="#e8edf6"
+          fill="#ffffff"
+          stroke="#ffffff"
           strokeWidth="1.2"
         />
       )}
 
       {showTimes && aos && los && (
         <>
-          <text x="6" y={size - 6} className="fill-[#6c7a91] font-mono text-[8px]">
+          <text x="6" y={size - 6} className="fill-[#86868f] font-mono text-[8px]">
             AOS {timeShort(aos.t, true)} &middot; {compass(aos.azimuth)} {deg(aos.azimuth, 0)}
           </text>
-          <text x={size - 6} y={size - 6} textAnchor="end" className="fill-[#6c7a91] font-mono text-[8px]">
+          <text x={size - 6} y={size - 6} textAnchor="end" className="fill-[#86868f] font-mono text-[8px]">
             LOS {timeShort(los.t, true)} &middot; {compass(los.azimuth)} {deg(los.azimuth, 0)}
           </text>
         </>
@@ -205,7 +198,7 @@ export function PolarPassChart({
 function Marker({ point, colour, label, filled }) {
   return (
     <g>
-      <circle cx={point[0]} cy={point[1]} r="3.2" fill={filled ? colour : '#070c15'} stroke={colour} strokeWidth="1.5" />
+      <circle cx={point[0]} cy={point[1]} r="3.2" fill={filled ? colour : '#000000'} stroke={colour} strokeWidth="1.5" />
       <text
         x={point[0] + 5.5}
         y={point[1] + 3}
@@ -257,14 +250,7 @@ export function SkyNowChart({
       role="img"
       aria-label={`Sky chart showing ${visible.length} objects above the horizon`}
     >
-      <defs>
-        <radialGradient id="skyNowFill" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#0d1420" />
-          <stop offset="100%" stopColor="#060a12" />
-        </radialGradient>
-      </defs>
-
-      <circle cx={centre} cy={centre} r={radius} fill="url(#skyNowFill)" stroke="#27344a" />
+      <circle cx={centre} cy={centre} r={radius} fill="#050505" stroke="#3a3a3f" />
 
       {[30, 60].map((elevation) => (
         <circle
@@ -273,7 +259,7 @@ export function SkyNowChart({
           cy={centre}
           r={radius * (1 - elevation / 90)}
           fill="none"
-          stroke="#1c2636"
+          stroke="#232326"
           strokeWidth="0.8"
         />
       ))}
@@ -283,7 +269,7 @@ export function SkyNowChart({
         cy={centre}
         r={radius * (1 - minElevation / 90)}
         fill="none"
-        stroke="#e0a03a"
+        stroke="#e8ac4a"
         strokeOpacity="0.4"
         strokeWidth="0.9"
         strokeDasharray="3 3"
@@ -291,15 +277,15 @@ export function SkyNowChart({
 
       {[0, 45, 90, 135, 180, 225, 270, 315].map((azimuth) => {
         const [x, y] = project(azimuth, 0);
-        return <line key={azimuth} x1={centre} y1={centre} x2={x} y2={y} stroke="#1c2636" strokeWidth="0.7" />;
+        return <line key={azimuth} x1={centre} y1={centre} x2={x} y2={y} stroke="#232326" strokeWidth="0.7" />;
       })}
 
       {maskPoints && (
         <polygon
           points={maskPoints.map((p) => p.join(',')).join(' ')}
-          fill="#e8605f"
+          fill="#f0706f"
           fillOpacity="0.12"
-          stroke="#e8605f"
+          stroke="#f0706f"
           strokeOpacity="0.35"
           strokeWidth="0.7"
         />
@@ -314,7 +300,7 @@ export function SkyNowChart({
             x={centre + r * Math.cos(theta)}
             y={centre + r * Math.sin(theta) + 3.5}
             textAnchor="middle"
-            className="fill-[#a3b0c4] text-[10px] font-semibold"
+            className="fill-[#c4c4cc] text-[10px] font-semibold"
           >
             {label}
           </text>
@@ -327,14 +313,14 @@ export function SkyNowChart({
             cx={project(sun.azimuth, Math.max(0, sun.elevation))[0]}
             cy={project(sun.azimuth, Math.max(0, sun.elevation))[1]}
             r="7"
-            fill="#e0a03a"
+            fill="#e8ac4a"
             fillOpacity="0.25"
           />
           <circle
             cx={project(sun.azimuth, Math.max(0, sun.elevation))[0]}
             cy={project(sun.azimuth, Math.max(0, sun.elevation))[1]}
             r="3.5"
-            fill="#e0a03a"
+            fill="#e8ac4a"
           />
         </g>
       )}
@@ -344,9 +330,9 @@ export function SkyNowChart({
           cx={project(moon.azimuth, moon.elevation)[0]}
           cy={project(moon.azimuth, moon.elevation)[1]}
           r="4"
-          fill="#a3b0c4"
+          fill="#c4c4cc"
           fillOpacity={0.3 + 0.7 * (moon.illumination ?? 0.5)}
-          stroke="#e8edf6"
+          stroke="#ffffff"
           strokeWidth="0.8"
         />
       )}
@@ -360,16 +346,16 @@ export function SkyNowChart({
             onClick={() => onSelect?.(object.id)}
             className={onSelect ? 'cursor-pointer' : undefined}
           >
-            {selected && <circle cx={x} cy={y} r="8" fill="none" stroke={object.colour ?? '#4d9bff'} strokeOpacity="0.5" />}
+            {selected && <circle cx={x} cy={y} r="8" fill="none" stroke={object.colour ?? '#ffffff'} strokeOpacity="0.5" />}
             <circle
               cx={x}
               cy={y}
               r={selected ? 5 : 3.8}
-              fill={object.eclipsed ? '#060a12' : object.colour ?? '#4d9bff'}
-              stroke={object.colour ?? '#4d9bff'}
+              fill={object.eclipsed ? '#000000' : object.colour ?? '#ffffff'}
+              stroke={object.colour ?? '#ffffff'}
               strokeWidth={object.eclipsed ? 1.5 : 0.8}
             />
-            <text x={x + 7} y={y + 3.5} className="fill-[#a3b0c4] text-[9px]">
+            <text x={x + 7} y={y + 3.5} className="fill-[#c4c4cc] text-[9px]">
               {object.name}
             </text>
           </g>
@@ -377,7 +363,7 @@ export function SkyNowChart({
       })}
 
       {visible.length === 0 && (
-        <text x={centre} y={centre} textAnchor="middle" className="fill-[#6c7a91] text-[10px]">
+        <text x={centre} y={centre} textAnchor="middle" className="fill-[#86868f] text-[10px]">
           Nothing above the horizon
         </text>
       )}

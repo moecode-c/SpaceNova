@@ -30,7 +30,7 @@ export default function Login() {
   return (
     <div className="space-y-6">
       <header className="space-y-1.5">
-        <h1 className="text-xl font-semibold tracking-[-0.02em] text-ink">Sign in</h1>
+        <h1 className="text-2xl leading-[1.1] text-ink">Sign in</h1>
         <p className="text-sm text-ink-dim">
           Pick up your observer locations and plans where you left them.
         </p>

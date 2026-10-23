@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight, Antenna, Binoculars, Blocks, CalendarRange, Compass, Cpu, Database,
@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import { Button, Badge, Tag } from '../../components/ui/primitives.jsx';
 import { Panel, PanelBody, PanelHeader, Section, Grid } from '../../components/ui/panel.jsx';
-import { SegmentedControl } from '../../components/ui/nav.jsx';
 import { WorldMap } from '../../components/map/WorldMap.jsx';
 import { SourceTag } from '../../components/data/source.jsx';
 import { EclipseBadge, OrbitBadge } from '../../components/data/badges.jsx';
@@ -15,7 +14,7 @@ import { useApi } from '../../hooks/useApi.js';
 import { useTracking } from '../../hooks/useTracking.js';
 import { tracking, launches as launchesApi, spaceWeather as weatherApi } from '../../api/index.js';
 import { ROLES } from '../../mock/people.js';
-import { km, kms, num, duration, dateShort, timeShort, percent, age } from '../../lib/format.js';
+import { km, kms, num, duration, dateShort, timeShort, percent } from '../../lib/format.js';
 
 const CAPABILITIES = [
   {
@@ -72,8 +71,6 @@ const SCORE_TERMS = [
 ];
 
 export default function Landing() {
-  const [mapMode, setMapMode] = useState('globe');
-
   const selection = useApi(() => tracking.defaultSelection(), []);
   const elementSets = useApi(
     () => tracking.elementSets(selection.data ?? []),
@@ -100,8 +97,10 @@ export default function Landing() {
     [states],
   );
 
+  // Tracks are drawn a step down from white so they read as part of the sky
+  // rather than as lines laid across the headline.
   const mapTracks = useMemo(
-    () => tracks.map((t) => ({ ...t, colour: '#4d9bff' })),
+    () => tracks.map((t) => ({ ...t, colour: '#8a8a93' })),
     [tracks],
   );
 
@@ -109,161 +108,143 @@ export default function Landing() {
   const sunlit = states.filter((s) => !s.eclipsed).length;
 
   return (
-    <div className="space-y-20 pb-20">
+    <div>
       {/* ------------------------------------------------------------- hero */}
-      <section className="relative overflow-hidden border-b border-line">
-        <div className="starfield absolute inset-0 bg-radial-fade" aria-hidden />
-        <div className="absolute inset-0 bg-grid-faint bg-grid opacity-50" aria-hidden />
+      {/*
+        A full-viewport title card. There is no photograph to put here (the
+        product ships no raster assets, on purpose), so the picture is the live
+        globe: the real tracker component, running the real propagation engine,
+        turning slowly behind the headline. Type sits straight on it with no
+        scrim; the globe is drawn dark enough that it does not need one.
+      */}
+      <section className="relative isolate flex min-h-screen flex-col overflow-hidden bg-base">
+        <div className="starfield absolute inset-0" aria-hidden />
 
-        <div className="relative mx-auto w-full max-w-7xl px-4 pb-12 pt-14 sm:px-6 sm:pt-20">
-          <div className="grid items-center grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
-            <div className="space-y-7">
-              <Badge tone="primary" size="sm" dot>
-                Front end build &middot; computing live from element sets
-              </Badge>
+        <div
+          className="pointer-events-none absolute right-[-30vw] top-1/2 w-[min(120vw,1100px)] -translate-y-1/2 opacity-60 sm:right-[-18vw] sm:opacity-80 lg:right-[-10vw] lg:w-[min(76vw,1180px)] lg:opacity-100"
+          aria-hidden
+        >
+          <WorldMap
+            mode="globe"
+            height={1180}
+            satellites={mapSatellites}
+            tracks={mapTracks}
+            showFootprints={false}
+            showLabels={false}
+            interactive={false}
+            autoRotate
+            className="!rounded-none !border-0 !bg-transparent"
+          />
+        </div>
 
-              <div className="space-y-4">
-                <h1 className="max-w-xl text-4xl font-semibold leading-[1.1] tracking-[-0.03em] text-ink sm:text-5xl">
-                  Track what is overhead, and know how much to trust it.
-                </h1>
-                <p className="max-w-xl text-base leading-relaxed text-ink-dim">
-                  SpaceNova brings satellite tracking, observation planning, mission and launch
-                  records, astronomy events, space weather and private research workspaces into one
-                  platform. It propagates orbits itself with a documented, testable engine, and every
-                  figure on screen carries its source, its age and its uncertainty.
-                </p>
-              </div>
+        <div className="relative z-10 flex flex-1 flex-col justify-end px-6 pb-10 pt-36 lg:px-8">
+          <div className="max-w-4xl space-y-8">
+            <p className="label-caps flex items-center gap-2.5 text-ink-dim">
+              <span className="h-1.5 w-1.5 rounded-full bg-ink" aria-hidden />
+              Front end build &middot; computing live from element sets
+            </p>
 
-              <div className="flex flex-wrap items-center gap-2.5">
-                <Link to="/register">
-                  <Button size="lg" variant="primary" iconRight={ArrowRight}>
-                    Create an account
-                  </Button>
-                </Link>
-                <Link to="/catalog">
-                  <Button size="lg" variant="outline" icon={Satellite}>
-                    Browse the catalogue
-                  </Button>
-                </Link>
-              </div>
+            <h1 className="text-[2.5rem] leading-[0.95] sm:text-5xl md:text-[3.75rem] lg:text-display-xxl">
+              Track what
+              <br />
+              is overhead
+            </h1>
 
-              <dl className="grid max-w-xl grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-6 sm:grid-cols-4">
-                {[
-                  ['Tracked now', num(states.length)],
-                  ['Sunlit', num(sunlit)],
-                  ['Refine step', '1 s'],
-                  ['Score terms', '5'],
-                ].map(([label, value]) => (
-                  <div key={label}>
-                    <dt className="label-caps">{label}</dt>
-                    <dd className="tnum mt-1 font-mono text-lg font-semibold text-ink">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+            <p className="max-w-xl text-[1rem] leading-[1.7] text-ink-dim">
+              Know how much to trust it. SpaceNova brings satellite tracking, observation planning,
+              mission and launch records, astronomy events, space weather and private research
+              workspaces into one platform. It propagates orbits itself with a documented, testable
+              engine, and every figure on screen carries its source, its age and its uncertainty.
+            </p>
 
-            {/* Live map. Not a screenshot: this is the real tracker component
-                running the real propagation engine. */}
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <Globe2 size={13} className="text-ink-faint" aria-hidden />
-                  <span className="label-caps">Live propagation</span>
-                </div>
-                <SegmentedControl
-                  size="sm"
-                  ariaLabel="Map projection"
-                  value={mapMode}
-                  onChange={setMapMode}
-                  options={[
-                    { value: 'globe', label: 'Globe' },
-                    { value: 'flat', label: 'Flat' },
-                  ]}
-                />
-              </div>
-
-              <WorldMap
-                mode={mapMode}
-                height={400}
-                satellites={mapSatellites}
-                tracks={mapTracks}
-                showFootprints
-                showLabels={false}
-                className="shadow-panel"
-              />
-
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex flex-wrap items-center gap-3 text-2xs text-ink-faint">
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-primary" aria-hidden /> sunlit
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full border-[1.5px] border-primary" aria-hidden /> eclipsed
-                  </span>
-                  <span>drag to rotate, scroll to zoom</span>
-                </div>
-                {elementSets.meta && <SourceTag meta={elementSets.meta} compact />}
-              </div>
+            <div>
+              <Link to="/register">
+                <Button size="lg" variant="outline" iconRight={ArrowRight}>
+                  Create an account
+                </Button>
+              </Link>
             </div>
           </div>
 
-          {/* Live readout for one object, so the hero carries real numbers. */}
-          {featured && !featured.error && (
-            <Panel className="mt-10">
-              <div className="grid grid-cols-1 divide-y divide-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-6 lg:divide-x">
-                <div className="flex items-center gap-3 p-4">
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-line bg-base text-primary">
-                    <Orbit size={16} aria-hidden />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="truncate text-xs font-semibold text-ink">{featured.name}</p>
-                    <p className="tnum font-mono text-2xs text-ink-faint">
-                      NORAD {featured.noradId}
-                    </p>
-                  </div>
+          {/* Telemetry strip: real numbers from the same propagation loop. */}
+          <div className="mt-14 space-y-6">
+            <dl className="grid max-w-2xl grid-cols-2 gap-x-8 gap-y-5 border-t border-line-strong pt-6 sm:grid-cols-4">
+              {[
+                ['Tracked now', num(states.length)],
+                ['Sunlit', num(sunlit)],
+                ['Refine step', '1 s'],
+                ['Score terms', '5'],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt className="label-caps">{label}</dt>
+                  <dd className="tnum mt-1.5 font-display text-3xl font-bold leading-none tracking-display text-ink">
+                    {value}
+                  </dd>
                 </div>
-                {[
-                  ['Altitude', km(featured.altitudeKm, 1)],
-                  ['Speed', kms(featured.speedKms)],
-                  ['Latitude', `${num(featured.latitude, 2)}°`],
-                  ['Longitude', `${num(featured.longitude, 2)}°`],
-                  ['Footprint', km(featured.footprintRadiusKm, 0)],
-                ].map(([label, value]) => (
-                  <div key={label} className="p-4">
-                    <p className="label-caps">{label}</p>
-                    <p className="tnum mt-1 font-mono text-sm text-ink">{value}</p>
+              ))}
+            </dl>
+
+            {featured && !featured.error && (
+              <Panel>
+                <div className="grid grid-cols-1 divide-y divide-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-6 lg:divide-x">
+                  <div className="flex items-center gap-3 p-4">
+                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-card border border-line-strong text-ink">
+                      <Orbit size={16} aria-hidden />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-2xs font-bold uppercase tracking-micro text-ink">
+                        {featured.name}
+                      </p>
+                      <p className="tnum font-mono text-2xs text-ink-faint">NORAD {featured.noradId}</p>
+                    </div>
                   </div>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-2 border-t border-line bg-base/40 px-4 py-2.5">
-                <OrbitBadge orbitClass={featured.orbitClass} />
-                <EclipseBadge state={featured.eclipse?.state} />
-                <Tag>period {num(featured.periodMinutes, 1)} min</Tag>
-                <Tag>inclination {num(featured.inclination, 2)}&deg;</Tag>
-                <span className="ml-auto inline-flex items-center gap-1.5 text-2xs text-ink-faint">
-                  <Cpu size={11} aria-hidden />
-                  Computed by SGP4, not a measurement
-                </span>
-              </div>
-            </Panel>
-          )}
+                  {[
+                    ['Altitude', km(featured.altitudeKm, 1)],
+                    ['Speed', kms(featured.speedKms)],
+                    ['Latitude', `${num(featured.latitude, 2)}°`],
+                    ['Longitude', `${num(featured.longitude, 2)}°`],
+                    ['Footprint', km(featured.footprintRadiusKm, 0)],
+                  ].map(([label, value]) => (
+                    <div key={label} className="p-4">
+                      <p className="label-caps">{label}</p>
+                      <p className="tnum mt-1 font-mono text-sm text-ink">{value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap items-center gap-2 border-t border-line px-4 py-2.5">
+                  <OrbitBadge orbitClass={featured.orbitClass} />
+                  <EclipseBadge state={featured.eclipse?.state} />
+                  <Tag>period {num(featured.periodMinutes, 1)} min</Tag>
+                  <Tag>inclination {num(featured.inclination, 2)}&deg;</Tag>
+                  <span className="ml-auto inline-flex items-center gap-3">
+                    {elementSets.meta && <SourceTag meta={elementSets.meta} compact />}
+                    <span className="inline-flex items-center gap-1.5 text-2xs uppercase tracking-micro text-ink-faint">
+                      <Cpu size={11} aria-hidden />
+                      Computed by SGP4, not a measurement
+                    </span>
+                  </span>
+                </div>
+              </Panel>
+            )}
+          </div>
         </div>
       </section>
 
       {/* ----------------------------------------------------- capabilities */}
-      <div className="mx-auto w-full max-w-7xl space-y-20 px-4 sm:px-6">
+      <div className="mx-auto w-full max-w-7xl space-y-28 px-4 py-24 sm:px-6 lg:px-8">
         <Section
+          large
           title="One platform, six working areas"
           description="Each area is a module of the specification, with its own requirements, screens and data sources. They share one catalogue, one engine and one set of thresholds."
         >
           <Grid cols={3}>
             {CAPABILITIES.map((item) => (
               <Panel key={item.title} className="h-full">
-                <PanelBody className="space-y-3">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-line bg-base text-primary">
-                    <item.icon size={16} aria-hidden />
+                <PanelBody className="space-y-4 p-5">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-card border border-line-strong text-ink">
+                    <item.icon size={17} aria-hidden />
                   </span>
-                  <h3 className="text-sm font-semibold text-ink">{item.title}</h3>
+                  <h3 className="text-[0.8125rem] text-ink">{item.title}</h3>
                   <p className="text-xs leading-relaxed text-ink-faint">{item.body}</p>
                 </PanelBody>
               </Panel>
@@ -273,6 +254,7 @@ export default function Landing() {
 
         {/* ------------------------------------------------- how a pass works */}
         <Section
+          large
           title="How a pass is decided"
           description="Most trackers tell you an object will be above the horizon. That is not the same as being able to see it. SpaceNova evaluates four clauses separately and tells you which one failed."
         >
@@ -286,13 +268,13 @@ export default function Landing() {
               <PanelBody padded={false}>
                 <ol className="divide-y divide-line">
                   {CLAUSES.map(([title, body, Icon], i) => (
-                    <li key={title} className="flex items-start gap-3.5 px-4 py-3.5">
-                      <span className="tnum mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line bg-base font-mono text-2xs text-ink-faint">
+                    <li key={title} className="flex items-start gap-3.5 px-4 py-4">
+                      <span className="tnum mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line-strong font-mono text-2xs text-ink-dim">
                         {i + 1}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-semibold text-ink">{title}</p>
-                        <p className="mt-0.5 text-xs leading-relaxed text-ink-faint">{body}</p>
+                        <p className="text-2xs font-bold uppercase tracking-micro text-ink">{title}</p>
+                        <p className="mt-1.5 text-xs leading-relaxed text-ink-faint">{body}</p>
                       </div>
                       <Icon size={14} className="mt-1 shrink-0 text-ink-faint" aria-hidden />
                     </li>
@@ -307,15 +289,15 @@ export default function Landing() {
                 subtitle="Five normalised terms with published weights. When the cloud forecast is missing the term is dropped and the rest are renormalised, rather than scoring the window as if the sky were clear."
                 icon={TrendingUp}
               />
-              <PanelBody className="space-y-3.5">
+              <PanelBody className="space-y-4">
                 {SCORE_TERMS.map(([label, weight]) => (
-                  <div key={label} className="space-y-1.5">
+                  <div key={label} className="space-y-2">
                     <div className="flex items-baseline justify-between gap-3">
                       <span className="text-xs text-ink-dim">{label}</span>
                       <span className="tnum font-mono text-xs text-ink">{weight}%</span>
                     </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-overlay">
-                      <div className="h-full rounded-full bg-primary/70" style={{ width: `${weight * 2.6}%` }} />
+                    <div className="h-1 overflow-hidden rounded-full bg-overlay">
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${weight * 2.6}%` }} />
                     </div>
                   </div>
                 ))}
@@ -330,6 +312,7 @@ export default function Landing() {
 
         {/* -------------------------------------------------------- live strip */}
         <Section
+          large
           title="Happening now"
           description="Pulled from the same endpoints the signed-in application uses."
         >
@@ -346,11 +329,11 @@ export default function Landing() {
                     <li key={launch.id}>
                       <Link
                         to={`/launches/${launch.id}`}
-                        className="block px-4 py-3 transition-colors hover:bg-overlay/40"
+                        className="block px-4 py-3.5 transition-colors hover:bg-overlay"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <p className="truncate text-xs font-medium text-ink">{launch.payloadName}</p>
+                            <p className="truncate text-xs font-semibold text-ink">{launch.payloadName}</p>
                             <p className="mt-0.5 truncate text-2xs text-ink-faint">
                               {launch.vehicle} &middot; {launch.provider}
                             </p>
@@ -386,7 +369,7 @@ export default function Landing() {
                     <div className="flex items-end justify-between gap-3">
                       <div>
                         <p className="label-caps">Planetary K index</p>
-                        <p className="tnum mt-1 font-mono text-2xl font-semibold text-ink">
+                        <p className="tnum mt-1.5 font-display text-4xl font-bold leading-none tracking-display text-ink">
                           {num(weather.data.kp, 1)}
                         </p>
                       </div>
@@ -417,12 +400,12 @@ export default function Landing() {
                 )}
               </PanelBody>
             </Panel>
-
           </div>
         </Section>
 
         {/* -------------------------------------------------------------- roles */}
         <Section
+          large
           title="Five user classes"
           description="One role per account. Researcher and Engineer both build on the Observer role, and an administrator sets the role on an account."
         >
@@ -438,9 +421,9 @@ export default function Landing() {
               }[key];
               return (
                 <Panel key={key} className="h-full">
-                  <PanelBody className="space-y-2.5">
-                    <Icon size={16} className="text-primary" aria-hidden />
-                    <h3 className="text-xs font-semibold text-ink">{role.label}</h3>
+                  <PanelBody className="space-y-3 p-5">
+                    <Icon size={17} className="text-ink" aria-hidden />
+                    <h3 className="text-[0.8125rem] text-ink">{role.label}</h3>
                     <p className="text-2xs leading-relaxed text-ink-faint">{role.description}</p>
                   </PanelBody>
                 </Panel>
@@ -450,7 +433,7 @@ export default function Landing() {
         </Section>
 
         {/* ---------------------------------------------------------- honesty */}
-        <Section title="What this platform will not do">
+        <Section large title="What this platform will not do">
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
             {[
               [
@@ -470,45 +453,43 @@ export default function Landing() {
               ],
             ].map(([Icon, title, body]) => (
               <Panel key={title} className="h-full">
-                <PanelBody className="space-y-3">
-                  <Icon size={16} className="text-warn" aria-hidden />
-                  <h3 className="text-sm font-semibold text-ink">{title}</h3>
+                <PanelBody className="space-y-4 p-5">
+                  <Icon size={17} className="text-ink" aria-hidden />
+                  <h3 className="text-[0.8125rem] text-ink">{title}</h3>
                   <p className="text-xs leading-relaxed text-ink-faint">{body}</p>
                 </PanelBody>
               </Panel>
             ))}
           </div>
         </Section>
-
-        {/* -------------------------------------------------------------- CTA */}
-        <Panel className="relative overflow-hidden">
-          <div className="starfield absolute inset-0 bg-radial-fade" aria-hidden />
-          <PanelBody className="relative flex flex-col items-center gap-5 px-6 py-14 text-center">
-            <h2 className="max-w-2xl text-2xl font-semibold tracking-[-0.02em] text-ink">
-              Set a location, choose your objects, and get a ranked plan for tonight.
-            </h2>
-            <p className="max-w-xl text-sm leading-relaxed text-ink-dim">
-              Observation planning takes a set of objects and a site, scans the horizon, refines
-              every crossing to the second and ranks the windows. It takes about a minute to set up.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-2.5">
-              <Link to="/register">
-                <Button size="lg" variant="primary" iconRight={ArrowRight}>
-                  Create an account
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button size="lg" variant="outline">
-                  Sign in
-                </Button>
-              </Link>
-            </div>
-            <p className="text-2xs text-ink-faint">
-              {duration(60)} to set up &middot; no back end connected in this build
-            </p>
-          </PanelBody>
-        </Panel>
       </div>
+
+      {/* -------------------------------------------------------------- CTA */}
+      <section className="relative overflow-hidden border-t border-line-strong">
+        <div className="starfield absolute inset-0" aria-hidden />
+        <div className="relative mx-auto flex w-full max-w-4xl flex-col items-center gap-8 px-6 py-28 text-center">
+          <h2 className="text-[2rem] leading-[1.15] sm:text-display-lg">
+            Set a location, choose your objects, and get a ranked plan for tonight.
+          </h2>
+          <p className="max-w-xl text-sm leading-relaxed text-ink-dim sm:text-[1rem]">
+            Observation planning takes a set of objects and a site, scans the horizon, refines
+            every crossing to the second and ranks the windows. It takes about a minute to set up.
+          </p>
+          <div className="flex flex-col items-center gap-5">
+            <Link to="/register">
+              <Button size="lg" variant="outline" iconRight={ArrowRight}>
+                Create an account
+              </Button>
+            </Link>
+            <Link to="/login" className="link text-[0.8125rem] font-bold uppercase tracking-cap">
+              Sign in
+            </Link>
+          </div>
+          <p className="text-2xs uppercase tracking-micro text-ink-faint">
+            {duration(60)} to set up &middot; no back end connected in this build
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

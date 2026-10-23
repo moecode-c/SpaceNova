@@ -19,7 +19,7 @@ import { catalog, plans as plansApi, tracking } from '../../api/index.js';
 import { useSettings } from '../../context/SettingsContext.jsx';
 import { compass, deg, hz, km, kms, latLon, num } from '../../lib/format.js';
 
-const TRACK_COLOURS = ['#4d9bff', '#2fbf8f', '#e0a03a', '#8b7bf0', '#e8605f', '#7db6ff', '#6c7a91', '#2fbf8f'];
+const TRACK_COLOURS = ['#ffffff', '#3fd49b', '#e8ac4a', '#d2d2e6', '#f0706f', '#f0f0fa', '#86868f', '#3fd49b'];
 
 export default function Tracker() {
   const [params, setParams] = useSearchParams();

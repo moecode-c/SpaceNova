@@ -121,7 +121,7 @@ export default function Audit() {
               header: 'Target',
               nowrap: false,
               hideBelow: 'md',
-              render: (r) => <code className="font-mono text-2xs text-ink-dim">{r.target}</code>,
+              render: (r) => <code className="font-code text-2xs text-ink-dim">{r.target}</code>,
             },
             {
               key: 'detail',

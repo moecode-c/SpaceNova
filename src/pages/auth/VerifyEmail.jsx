@@ -28,7 +28,7 @@ export default function VerifyEmail() {
           <CheckCircle2 size={22} aria-hidden />
         </span>
         <div className="space-y-1.5">
-          <h1 className="text-xl font-semibold text-ink">Address confirmed</h1>
+          <h1 className="text-2xl leading-[1.1] text-ink">Address confirmed</h1>
           <p className="text-sm text-ink-dim">
             Your account is active. Sign in and set an observer location to start planning.
           </p>
@@ -46,7 +46,7 @@ export default function VerifyEmail() {
         <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-primary">
           <MailCheck size={20} aria-hidden />
         </span>
-        <h1 className="pt-2 text-xl font-semibold tracking-[-0.02em] text-ink">
+        <h1 className="pt-2 text-2xl leading-[1.1] text-ink">
           Confirm your email address
         </h1>
         <p className="text-sm leading-relaxed text-ink-dim">

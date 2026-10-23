@@ -193,7 +193,7 @@ export default function ElementSets() {
               <Panel>
                 <PanelHeader title="Current set, in full" icon={Satellite} />
                 <PanelBody className="space-y-3">
-                  <pre className="overflow-x-auto rounded-md border border-line bg-void px-3 py-2.5 font-mono text-[0.68rem] leading-relaxed text-ink-dim">
+                  <pre className="overflow-x-auto rounded-md border border-line bg-void px-3 py-2.5 font-code text-[0.68rem] leading-relaxed text-ink-dim">
                     {data.sets[0].line1}
                     {'\n'}
                     {data.sets[0].line2}

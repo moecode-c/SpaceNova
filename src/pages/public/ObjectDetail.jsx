@@ -241,7 +241,7 @@ export default function ObjectDetail() {
                 actions={<FreshnessBadge freshness={row.freshness} />}
               />
               <PanelBody>
-                <pre className="overflow-x-auto rounded-md border border-line bg-void px-3 py-2.5 font-mono text-[0.68rem] leading-relaxed text-ink-dim">
+                <pre className="overflow-x-auto rounded-md border border-line bg-void px-3 py-2.5 font-code text-[0.68rem] leading-relaxed text-ink-dim">
                   {row.elementSet.line1}
                   {'\n'}
                   {row.elementSet.line2}
@@ -293,7 +293,7 @@ export default function ObjectDetail() {
             mode={mapMode}
             height={440}
             satellites={mapSatellites}
-            tracks={tracks.map((t) => ({ ...t, colour: '#4d9bff' }))}
+            tracks={tracks.map((t) => ({ ...t, colour: '#ffffff' }))}
             observer={observer ? { ...observer, name: activeLocation?.name } : undefined}
             selectedId={live?.objectId}
             showFootprints

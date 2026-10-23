@@ -6,18 +6,20 @@ import { sunPosition, RAD } from '../../engine/sun.js';
 import { gmstFor } from '../../engine/propagate.js';
 import { clamp } from '../../lib/random.js';
 
+// Greyscale, like the rest of the system: the only colour on the map is the
+// observer marker and the launch pads, which are status marks.
 const PALETTE = {
-  ocean: '#070c15',
-  land: '#141d2c',
-  landStroke: '#243149',
-  border: '#1b2538',
-  graticule: 'rgba(255,255,255,0.045)',
-  sphereStroke: '#2b3a53',
-  night: 'rgba(2,4,9,0.62)',
-  terminator: 'rgba(125,182,255,0.32)',
-  observer: '#2fbf8f',
-  footprint: 'rgba(77,155,255,0.09)',
-  footprintStroke: 'rgba(77,155,255,0.45)',
+  ocean: '#0c0c0e',
+  land: '#1d1d21',
+  landStroke: '#34343a',
+  border: '#26262b',
+  graticule: 'rgba(255,255,255,0.05)',
+  sphereStroke: '#3a3a3f',
+  night: 'rgba(0,0,0,0.64)',
+  terminator: 'rgba(255,255,255,0.3)',
+  observer: '#3fd49b',
+  footprint: 'rgba(255,255,255,0.06)',
+  footprintStroke: 'rgba(255,255,255,0.45)',
 };
 
 /** Sub-solar point, for the day and night shading. */
@@ -53,6 +55,7 @@ export function WorldMap({
   className,
   height = 420,
   interactive = true,
+  autoRotate = false,
 }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -74,6 +77,19 @@ export function WorldMap({
     observerRo.observe(node);
     return () => observerRo.disconnect();
   }, []);
+
+  // A slow turn for the landing hero, where the globe is scenery rather than a
+  // control. It stands still for anybody who has asked for reduced motion, and
+  // while the globe is being dragged.
+  useEffect(() => {
+    if (!autoRotate || mode !== 'globe') return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const timer = setInterval(() => {
+      if (dragState.current) return;
+      setRotation(([lon, lat]) => [lon + 0.35, lat]);
+    }, 50);
+    return () => clearInterval(timer);
+  }, [autoRotate, mode]);
 
   // An equirectangular map is 2:1 and a globe is 1:1. Holding the requested
   // height on a narrow container would letterbox the drawing inside a tall
@@ -181,7 +197,7 @@ export function WorldMap({
         path(circle);
         ctx.fillStyle = PALETTE.footprint;
         ctx.fill();
-        ctx.strokeStyle = isSelected ? PALETTE.footprintStroke : 'rgba(77,155,255,0.22)';
+        ctx.strokeStyle = isSelected ? PALETTE.footprintStroke : 'rgba(255,255,255,0.22)';
         ctx.lineWidth = isSelected ? 1 : 0.7;
         ctx.setLineDash(isSelected ? [] : [3, 3]);
         ctx.stroke();
@@ -192,7 +208,7 @@ export function WorldMap({
     // Ground tracks.
     for (const track of tracks) {
       const isSelected = track.id === selectedId;
-      ctx.strokeStyle = track.colour ?? '#4d9bff';
+      ctx.strokeStyle = track.colour ?? '#ffffff';
       ctx.globalAlpha = isSelected ? 0.95 : 0.4;
       ctx.lineWidth = isSelected ? 1.6 : 1;
       ctx.setLineDash(track.dashed ? [4, 4] : []);
@@ -217,7 +233,7 @@ export function WorldMap({
       ctx.lineTo(point[0] + 3.4, point[1] + 2.4);
       ctx.lineTo(point[0] - 3.4, point[1] + 2.4);
       ctx.closePath();
-      ctx.fillStyle = 'rgba(224,160,58,0.85)';
+      ctx.fillStyle = 'rgba(232,172,74,0.85)';
       ctx.fill();
     }
 
@@ -226,7 +242,7 @@ export function WorldMap({
       if (!point || !isVisible(projection, mode, [station.longitude, station.latitude])) continue;
       ctx.beginPath();
       ctx.arc(point[0], point[1], 3, 0, Math.PI * 2);
-      ctx.strokeStyle = '#8b7bf0';
+      ctx.strokeStyle = '#d2d2e6';
       ctx.lineWidth = 1.4;
       ctx.stroke();
     }
@@ -258,7 +274,7 @@ export function WorldMap({
       if (!point) continue;
 
       const isSelected = sat.id === selectedId;
-      const colour = sat.colour ?? '#4d9bff';
+      const colour = sat.colour ?? '#ffffff';
       const radius = isSelected ? 5 : 3.6;
 
       hitBoxes.current.push({ id: sat.id, x: point[0], y: point[1] });
@@ -291,7 +307,7 @@ export function WorldMap({
       }
 
       if (showLabels && (isSelected || satellites.length <= 10)) {
-        drawLabel(ctx, sat.name, point[0] + radius + 5, point[1] + 3.5, isSelected ? '#e8edf6' : '#a3b0c4');
+        drawLabel(ctx, sat.name, point[0] + radius + 5, point[1] + 3.5, isSelected ? '#ffffff' : '#c4c4cc');
       }
     }
   }, [
@@ -371,7 +387,7 @@ export function WorldMap({
     <div
       ref={containerRef}
       className={cn(
-        'relative w-full min-w-0 overflow-hidden rounded-card border border-line bg-void',
+        'relative w-full min-w-0 overflow-hidden rounded-card border border-line-strong bg-void',
         className,
       )}
       style={{ height: size.height }}
@@ -381,8 +397,11 @@ export function WorldMap({
         role="img"
         aria-label={`World map showing ${satellites.length} tracked objects`}
         className={cn(
-          'block touch-none select-none',
-          interactive && (mode === 'globe' ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'),
+          'block select-none',
+          // A non-interactive map is scenery and must not trap touch scrolling.
+          interactive
+            ? cn('touch-none', mode === 'globe' ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair')
+            : 'pointer-events-none',
         )}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -398,7 +417,7 @@ export function WorldMap({
             setPan([0, 0]);
             setRotation([20, -12]);
           }}
-          className="absolute bottom-3 right-3 rounded-md border border-line-strong bg-raised/90 px-2.5 py-1 text-2xs text-ink-dim backdrop-blur transition-colors hover:text-ink"
+          className="absolute bottom-3 right-3 rounded-full border border-line-strong bg-base px-3 py-1 text-2xs font-bold uppercase tracking-micro text-ink-dim transition-colors hover:border-ink hover:text-ink"
         >
           Reset view
         </button>
@@ -408,10 +427,10 @@ export function WorldMap({
 }
 
 function drawLabel(ctx, text, x, y, colour) {
-  ctx.font = '500 10px Inter, system-ui, sans-serif';
+  ctx.font = '600 10px Barlow, "D-DIN", Arial, sans-serif';
   ctx.textAlign = 'left';
   const width = ctx.measureText(text).width;
-  ctx.fillStyle = 'rgba(5,7,12,0.72)';
+  ctx.fillStyle = 'rgba(0,0,0,0.78)';
   ctx.fillRect(x - 2, y - 9, width + 4, 12);
   ctx.fillStyle = colour;
   ctx.fillText(text, x, y);

@@ -27,7 +27,7 @@ export default function ResetPassword() {
           <CheckCircle2 size={22} aria-hidden />
         </span>
         <div className="space-y-1.5">
-          <h1 className="text-xl font-semibold text-ink">Password changed</h1>
+          <h1 className="text-2xl leading-[1.1] text-ink">Password changed</h1>
           <p className="text-sm text-ink-dim">
             The reset link has been consumed and cannot be used again. Any other sessions have been
             signed out.
@@ -46,7 +46,7 @@ export default function ResetPassword() {
         <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-primary">
           <ShieldCheck size={20} aria-hidden />
         </span>
-        <h1 className="pt-2 text-xl font-semibold tracking-[-0.02em] text-ink">
+        <h1 className="pt-2 text-2xl leading-[1.1] text-ink">
           Choose a new password
         </h1>
         <p className="text-sm text-ink-dim">

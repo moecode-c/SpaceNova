@@ -245,7 +245,7 @@ export function RocketScale({
       onDrop={handleDrop}
       className={cn(
         'relative h-full w-full select-none overflow-hidden outline-none',
-        'bg-[radial-gradient(ellipse_70%_55%_at_50%_8%,#0d1726_0%,#070b12_55%,#04060a_100%)]',
+        'bg-void',
         panning ? 'cursor-grabbing' : 'cursor-grab',
       )}
       role="application"
@@ -256,17 +256,17 @@ export function RocketScale({
           <PartDefs prefix={PAD} />
           <defs>
             <radialGradient id={`${PAD}-exhaust`} cx="50%" cy="0%" r="100%">
-              <stop offset="0%" stopColor="#bcd8ff" stopOpacity="0.55" />
-              <stop offset="35%" stopColor="#4d9bff" stopOpacity="0.22" />
-              <stop offset="100%" stopColor="#4d9bff" stopOpacity="0" />
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+              <stop offset="35%" stopColor="#ffffff" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
             </radialGradient>
             <linearGradient id={`${PAD}-horizon`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#4d9bff" stopOpacity="0" />
-              <stop offset="100%" stopColor="#4d9bff" stopOpacity="0.13" />
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.13" />
             </linearGradient>
             <linearGradient id={`${PAD}-deck`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2b3a4f" />
-              <stop offset="100%" stopColor="#121a26" />
+              <stop offset="0%" stopColor="#393c41" />
+              <stop offset="100%" stopColor="#1a1c1e" />
             </linearGradient>
           </defs>
 
@@ -278,7 +278,7 @@ export function RocketScale({
                 cx={(s.x * size.w + view.dx * s.depth + size.w) % size.w}
                 cy={(s.y * size.h + view.dy * s.depth + size.h) % size.h}
                 r={s.r}
-                fill="#cfe0f5"
+                fill="#dee2e6"
                 opacity={s.o}
               />
             ))}
@@ -294,7 +294,7 @@ export function RocketScale({
                   y1={toY(m)}
                   x2={size.w}
                   y2={toY(m)}
-                  stroke="#16202e"
+                  stroke="#202224"
                   strokeWidth="1"
                 />
               ))}
@@ -318,8 +318,8 @@ export function RocketScale({
                 y={towerTop}
                 width={towerW}
                 height={groundY - towerTop}
-                fill="#101823"
-                stroke="#243246"
+                fill="#18191b"
+                stroke="#323438"
                 strokeWidth="1"
               />
               {/* lattice */}
@@ -328,7 +328,7 @@ export function RocketScale({
                 (_, i) => {
                   const y = towerTop + i * 22;
                   return (
-                    <g key={i} stroke="#2b3b52" strokeWidth="1">
+                    <g key={i} stroke="#3b3e42" strokeWidth="1">
                       <line x1={towerX} y1={y} x2={towerX + towerW} y2={y} />
                       <line x1={towerX} y1={y} x2={towerX + towerW} y2={y + 22} />
                     </g>
@@ -341,7 +341,7 @@ export function RocketScale({
                 y={toY(totalLengthM * 0.62)}
                 width={Math.max(2, towerX - cx - toW(maxDiameterM) / 2)}
                 height={Math.max(2, toW(maxDiameterM) * 0.07)}
-                fill="#2b3b52"
+                fill="#3b3e42"
               />
             </g>
           )}
@@ -405,7 +405,7 @@ export function RocketScale({
                     width={w}
                     height={14}
                     rx={3}
-                    fill="#05080d"
+                    fill="#08090a"
                     opacity="0.78"
                   />
                   <text
@@ -424,8 +424,8 @@ export function RocketScale({
           {/* ---- balance markers ----------------------------------------- */}
           {!empty &&
             [
-              cop && { yM: cop.yM, key: 'CoP', colour: '#e0a03a', label: 'CoP' },
-              cog && { yM: cog.yM, key: 'CoG', colour: '#2fbf8f', label: 'CoG' },
+              cop && { yM: cop.yM, key: 'CoP', colour: '#e8ac4a', label: 'CoP' },
+              cog && { yM: cog.yM, key: 'CoG', colour: '#3fd49b', label: 'CoG' },
             ]
               .filter(Boolean)
               .map((marker) => {
@@ -477,14 +477,14 @@ export function RocketScale({
               width={padDeckHalf * 2}
               height={12}
               fill={`url(#${PAD}-deck)`}
-              stroke="#2b3b52"
+              stroke="#3b3e42"
               strokeWidth="1"
             />
             {/* flame trench */}
             <path
               d={`M ${cx - padDeckHalf * 0.42} ${groundY + 12} L ${cx - padDeckHalf * 0.3} ${groundY + 34} L ${cx + padDeckHalf * 0.3} ${groundY + 34} L ${cx + padDeckHalf * 0.42} ${groundY + 12} Z`}
-              fill="#070b11"
-              stroke="#1c2636"
+              fill="#0b0c0d"
+              stroke="#232326"
               strokeWidth="1"
             />
             <line
@@ -492,7 +492,7 @@ export function RocketScale({
               y1={groundY}
               x2={size.w}
               y2={groundY}
-              stroke="#e0a03a"
+              stroke="#e8ac4a"
               strokeWidth="1"
               opacity="0.35"
             />
@@ -500,8 +500,8 @@ export function RocketScale({
 
           {/* ---- ruler, recomputed from the live transform ------------- */}
           <g>
-            <rect x="0" y="0" width={GUTTER} height={size.h} fill="#05080d" opacity="0.72" />
-            <line x1={GUTTER - 1} y1="0" x2={GUTTER - 1} y2={size.h} stroke="#1c2636" strokeWidth="1" />
+            <rect x="0" y="0" width={GUTTER} height={size.h} fill="#08090a" opacity="0.72" />
+            <line x1={GUTTER - 1} y1="0" x2={GUTTER - 1} y2={size.h} stroke="#232326" strokeWidth="1" />
             {ticks.map(({ m, step }) => (
               <g key={`t${m}`}>
                 <line
@@ -509,7 +509,7 @@ export function RocketScale({
                   y1={toY(m)}
                   x2={GUTTER - 1}
                   y2={toY(m)}
-                  stroke="#e0a03a"
+                  stroke="#e8ac4a"
                   strokeWidth="1"
                   opacity="0.75"
                 />
@@ -545,10 +545,10 @@ export function RocketScale({
                 y1={toY(hoverAt.yM)}
                 x2={size.w}
                 y2={toY(hoverAt.yM)}
-                stroke="#7db6ff"
+                stroke="#f0f0fa"
                 strokeWidth="2"
               />
-              <circle cx={GUTTER + 8} cy={toY(hoverAt.yM)} r="3.4" fill="#7db6ff" />
+              <circle cx={GUTTER + 8} cy={toY(hoverAt.yM)} r="3.4" fill="#f0f0fa" />
             </g>
           )}
 
@@ -615,7 +615,7 @@ export function RocketScale({
 
       {/* ---- heads-up readouts ----------------------------------------- */}
       {padAccelG !== null && padAccelG !== undefined && (
-        <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-md border border-line bg-void/85 px-3 py-1.5 backdrop-blur">
+        <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-md border border-line bg-void/85 px-3 py-1.5">
           <span className="tnum font-mono text-xs">
             <span className="text-ink-faint">Pad accel </span>
             <span className={padAccelG > 0 ? 'text-good' : 'text-bad'}>
@@ -626,7 +626,7 @@ export function RocketScale({
       )}
 
       {/* ---- camera controls -------------------------------------------- */}
-      <div className="absolute right-3 top-3 flex items-center gap-1 rounded-md border border-line bg-void/85 p-1 backdrop-blur">
+      <div className="absolute right-3 top-3 flex items-center gap-1 rounded-md border border-line bg-void/85 p-1">
         <PadButton label="Zoom out" onClick={() => zoomAt(0.8, size.w / 2, size.h / 2)}>
           <Minus size={13} aria-hidden />
         </PadButton>
@@ -697,8 +697,8 @@ function HitBox({
       className={cn(
         'pointer-events-auto absolute -translate-x-1/2 rounded-sm transition-shadow',
         selected
-          ? 'shadow-[0_0_0_1.5px_rgba(125,182,255,0.9),0_0_22px_-2px_rgba(77,155,255,0.65)]'
-          : 'hover:shadow-[0_0_0_1.5px_rgba(46,95,158,0.9)]',
+          ? 'shadow-[0_0_0_1.5px_rgba(255,255,255,0.95)]'
+          : 'hover:shadow-[0_0_0_1.5px_rgba(255,255,255,0.5)]',
         dragging && 'opacity-40',
         draggable ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer',
       )}
