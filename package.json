@@ -1,0 +1,32 @@
+{
+  "name": "spacenova",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SpaceNova - scalable space-data and observation planning platform (front end)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "d3-geo": "3.1.1",
+    "date-fns": "3.6.0",
+    "lucide-react": "0.445.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.26.2",
+    "recharts": "2.12.7",
+    "satellite.js": "5.0.0",
+    "topojson-client": "3.1.0",
+    "world-atlas": "2.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.1",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.47",
+    "tailwindcss": "3.4.13",
+    "vite": "5.4.8"
+  }
+}
