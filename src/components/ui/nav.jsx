@@ -17,11 +17,11 @@ export function Tabs({ tabs, value, onChange, className, size = 'md' }) {
             aria-selected={active}
             onClick={() => onChange(tab.value)}
             className={cn(
-              'relative inline-flex items-center gap-2 whitespace-nowrap border-b-2 font-medium transition-colors',
-              size === 'sm' ? 'px-2.5 py-2 text-xs' : 'px-3 py-2.5 text-sm',
+              'relative inline-flex items-center gap-2 whitespace-nowrap border-b-2 font-bold uppercase tracking-micro transition-colors',
+              size === 'sm' ? 'px-3 py-2 text-2xs' : 'px-3.5 py-3 text-xs',
               active
-                ? 'border-primary text-ink'
-                : 'border-transparent text-ink-faint hover:text-ink-dim',
+                ? 'border-ink text-ink'
+                : 'border-transparent text-ink-faint hover:text-ink',
             )}
           >
             {Icon && <Icon size={14} aria-hidden />}
@@ -29,8 +29,8 @@ export function Tabs({ tabs, value, onChange, className, size = 'md' }) {
             {tab.count !== undefined && (
               <span
                 className={cn(
-                  'tnum rounded-full px-1.5 py-0.5 font-mono text-2xs',
-                  active ? 'bg-primary-soft text-primary-bright' : 'bg-overlay text-ink-faint',
+                  'tnum rounded-full px-1.5 py-0.5 font-mono text-2xs font-semibold tracking-normal',
+                  active ? 'bg-ink text-black' : 'bg-overlay text-ink-faint',
                 )}
               >
                 {tab.count}
@@ -50,7 +50,7 @@ export function SegmentedControl({ options, value, onChange, className, size = '
       role="radiogroup"
       aria-label={ariaLabel}
       className={cn(
-        'inline-flex shrink-0 items-center gap-0.5 rounded-md border border-line bg-base/70 p-0.5',
+        'inline-flex shrink-0 items-center gap-0.5 rounded-full border border-line-strong p-0.5',
         className,
       )}
     >
@@ -66,9 +66,9 @@ export function SegmentedControl({ options, value, onChange, className, size = '
             title={option.title ?? option.label}
             onClick={() => onChange(option.value)}
             className={cn(
-              'inline-flex items-center gap-1.5 rounded font-medium transition-colors',
-              size === 'sm' ? 'px-2 py-1 text-2xs' : 'px-2.5 py-1.5 text-xs',
-              active ? 'bg-overlay text-ink' : 'text-ink-faint hover:text-ink-dim',
+              'inline-flex items-center gap-1.5 rounded-full font-bold uppercase tracking-micro transition-colors',
+              size === 'sm' ? 'px-3 py-1 text-2xs' : 'px-3.5 py-1.5 text-2xs',
+              active ? 'bg-cool text-black' : 'text-ink-faint hover:text-ink',
             )}
           >
             {Icon && <Icon size={size === 'sm' ? 12 : 13} aria-hidden />}
@@ -82,12 +82,15 @@ export function SegmentedControl({ options, value, onChange, className, size = '
 
 export function Breadcrumbs({ items, className }) {
   return (
-    <nav aria-label="Breadcrumb" className={cn('flex items-center gap-1 text-2xs text-ink-faint', className)}>
+    <nav
+      aria-label="Breadcrumb"
+      className={cn('flex flex-wrap items-center gap-1 text-2xs uppercase tracking-micro text-ink-faint', className)}
+    >
       {items.map((item, i) => (
         <span key={`${item.label}-${i}`} className="inline-flex items-center gap-1">
           {i > 0 && <ChevronRight size={11} className="text-ink-faint/60" aria-hidden />}
           {item.to ? (
-            <Link to={item.to} className="transition-colors hover:text-ink-dim">
+            <Link to={item.to} className="transition-colors hover:text-ink">
               {item.label}
             </Link>
           ) : (
@@ -112,10 +115,10 @@ export function SideList({ items, value, onChange, className }) {
             type="button"
             onClick={() => onChange(item.value)}
             className={cn(
-              'flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-xs transition-colors',
+              'flex w-full items-center gap-2.5 rounded-card px-3 py-2.5 text-left text-2xs font-bold uppercase tracking-micro transition-colors',
               active
-                ? 'bg-primary-soft/50 text-primary-bright'
-                : 'text-ink-faint hover:bg-overlay/60 hover:text-ink-dim',
+                ? 'bg-overlay text-ink'
+                : 'text-ink-faint hover:bg-overlay hover:text-ink',
             )}
           >
             {Icon && <Icon size={14} className="shrink-0" aria-hidden />}

@@ -5,31 +5,40 @@ import { cn } from '../../lib/cn.js';
 /**
  * Semantic tone classes shared by badges, banners and status dots. Keeping them
  * in one map is what stops "warning amber" drifting between screens.
+ *
+ * Only the status tones carry a hue. "primary" and "default" are white and
+ * grey: the design system has no accent colour.
  */
 export const TONES = {
-  default: { text: 'text-ink-dim', bg: 'bg-overlay', border: 'border-line-strong', dot: 'bg-ink-faint' },
-  primary: { text: 'text-primary-bright', bg: 'bg-primary-soft/60', border: 'border-primary-dim/60', dot: 'bg-primary' },
-  good: { text: 'text-good', bg: 'bg-good-soft/70', border: 'border-good/30', dot: 'bg-good' },
-  warn: { text: 'text-warn', bg: 'bg-warn-soft/70', border: 'border-warn/30', dot: 'bg-warn' },
-  bad: { text: 'text-bad', bg: 'bg-bad-soft/70', border: 'border-bad/30', dot: 'bg-bad' },
-  info: { text: 'text-info', bg: 'bg-info-soft/70', border: 'border-info/30', dot: 'bg-info' },
+  default: { text: 'text-ink-dim', bg: 'bg-transparent', border: 'border-line-strong', dot: 'bg-ink-faint' },
+  primary: { text: 'text-ink', bg: 'bg-primary-soft', border: 'border-primary-dim', dot: 'bg-primary' },
+  good: { text: 'text-good', bg: 'bg-good-soft', border: 'border-good/40', dot: 'bg-good' },
+  warn: { text: 'text-warn', bg: 'bg-warn-soft', border: 'border-warn/40', dot: 'bg-warn' },
+  bad: { text: 'text-bad', bg: 'bg-bad-soft', border: 'border-bad/40', dot: 'bg-bad' },
+  info: { text: 'text-info', bg: 'bg-info-soft', border: 'border-info/40', dot: 'bg-info' },
 };
 
+/*
+ * Buttons are pills with all-caps labels. The ghost pill (`outline`) is the
+ * design system's signature control and the only call to action on marketing
+ * surfaces; `primary` is the one solid control, kept for the commit action on
+ * a form or a panel.
+ */
 const BUTTON_VARIANTS = {
-  primary:
-    'bg-primary text-[#04121f] hover:bg-primary-bright active:bg-primary font-semibold shadow-[0_1px_0_0_rgba(255,255,255,0.15)_inset]',
-  secondary: 'bg-overlay text-ink hover:bg-line-strong border border-line-strong',
-  ghost: 'text-ink-dim hover:text-ink hover:bg-overlay/70',
-  outline: 'border border-line-strong text-ink hover:border-primary-dim hover:text-primary-bright',
-  danger: 'bg-bad/90 text-white hover:bg-bad border border-bad/40',
-  subtle: 'bg-primary-soft/50 text-primary-bright hover:bg-primary-soft border border-primary-dim/40',
+  primary: 'border border-cool bg-cool text-black hover:border-ink hover:bg-ink',
+  secondary: 'border border-line-strong text-ink hover:border-ink',
+  ghost: 'text-ink-dim hover:bg-overlay hover:text-ink',
+  outline: 'border border-ink text-ink hover:bg-cool hover:text-black',
+  danger: 'border border-bad/70 text-bad hover:border-bad hover:bg-bad hover:text-black',
+  subtle: 'border border-line-strong bg-overlay text-ink hover:border-ink',
 };
 
 const BUTTON_SIZES = {
-  xs: 'h-7 px-2.5 text-2xs gap-1.5 rounded-md',
-  sm: 'h-8 px-3 text-xs gap-1.5 rounded-md',
-  md: 'h-9 px-3.5 text-sm gap-2 rounded-md',
-  lg: 'h-11 px-5 text-sm gap-2 rounded-lg',
+  xs: 'h-7 px-3 text-2xs gap-1.5',
+  sm: 'h-8 px-4 text-2xs gap-1.5',
+  md: 'h-10 px-5 text-xs gap-2',
+  // The marketing CTA: 18px / 24px padding around 13px caps.
+  lg: 'h-[3.125rem] px-6 text-[0.8125rem] gap-2.5',
 };
 
 export const Button = forwardRef(function Button(
@@ -41,7 +50,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       type={props.type ?? 'button'}
       className={cn(
-        'inline-flex select-none items-center justify-center whitespace-nowrap font-medium transition-colors',
+        'inline-flex select-none items-center justify-center whitespace-nowrap rounded-full font-bold uppercase tracking-cap transition-colors',
         'disabled:pointer-events-none disabled:opacity-45',
         BUTTON_VARIANTS[variant],
         BUTTON_SIZES[size],
@@ -73,7 +82,7 @@ export const IconButton = forwardRef(function IconButton(
       aria-label={label}
       title={label}
       className={cn(
-        'inline-flex shrink-0 items-center justify-center rounded-md transition-colors',
+        'inline-flex shrink-0 items-center justify-center rounded-full transition-colors',
         'disabled:pointer-events-none disabled:opacity-40',
         BUTTON_VARIANTS[variant],
         box,
@@ -95,7 +104,7 @@ export function Badge({ tone = 'default', icon: Icon, dot, size = 'md', classNam
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border font-medium',
+        'inline-flex items-center gap-1.5 rounded-full border font-semibold uppercase tracking-micro',
         size === 'sm' ? 'px-2 py-0.5 text-2xs' : 'px-2.5 py-1 text-xs',
         t.bg,
         t.border,
@@ -115,8 +124,8 @@ export function Tag({ className, children, mono = true }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded border border-line-strong bg-overlay/70 px-1.5 py-0.5 text-2xs text-ink-dim',
-        mono && 'font-mono tracking-tight',
+        'inline-flex items-center rounded border border-line-strong px-1.5 py-0.5 text-2xs text-ink-dim',
+        mono && 'font-mono',
         className,
       )}
     >
@@ -148,7 +157,7 @@ export function Avatar({ name, size = 'md', className }) {
   return (
     <span
       className={cn(
-        'inline-flex shrink-0 items-center justify-center rounded-full border border-line-strong bg-overlay font-semibold text-ink-dim',
+        'inline-flex shrink-0 items-center justify-center rounded-full border border-line-strong bg-overlay font-bold text-ink-dim',
         box,
         className,
       )}
@@ -163,15 +172,9 @@ export function Spinner({ size = 16, className }) {
   return <Loader2 size={size} className={cn('animate-spin text-ink-faint', className)} aria-hidden />;
 }
 
+/** A flat pulse rather than a sweeping gradient: the system has no gradients. */
 export function Skeleton({ className }) {
-  return (
-    <span
-      className={cn('relative block overflow-hidden rounded bg-overlay/70', className)}
-      aria-hidden
-    >
-      <span className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.055] to-transparent" />
-    </span>
-  );
+  return <span className={cn('block animate-pulse rounded bg-overlay', className)} aria-hidden />;
 }
 
 export function Divider({ className, vertical }) {
@@ -184,7 +187,7 @@ export function Divider({ className, vertical }) {
 
 export function Kbd({ children }) {
   return (
-    <kbd className="rounded border border-line-strong bg-overlay px-1.5 py-0.5 font-mono text-2xs text-ink-dim">
+    <kbd className="rounded border border-line-strong bg-overlay px-1.5 py-0.5 text-2xs text-ink-dim">
       {children}
     </kbd>
   );

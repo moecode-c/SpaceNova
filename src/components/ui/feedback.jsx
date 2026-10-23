@@ -14,11 +14,11 @@ export function EmptyState({ icon: Icon = Inbox, title, description, action, cla
         className,
       )}
     >
-      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line bg-overlay/60 text-ink-faint">
+      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line-strong text-ink-faint">
         <Icon size={18} aria-hidden />
       </span>
-      <div className="space-y-1">
-        <p className="text-sm font-medium text-ink">{title}</p>
+      <div className="space-y-1.5">
+        <p className="text-xs font-bold uppercase tracking-cap text-ink">{title}</p>
         {description && (
           <p className="mx-auto max-w-sm text-xs leading-relaxed text-ink-faint">{description}</p>
         )}
@@ -40,11 +40,11 @@ export function ErrorState({ error, onRetry, className, compact }) {
       )}
       role="alert"
     >
-      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-bad/40 bg-bad-soft/60 text-bad">
+      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-bad/40 bg-bad-soft text-bad">
         <CircleAlert size={18} aria-hidden />
       </span>
-      <div className="space-y-1">
-        <p className="text-sm font-medium text-ink">Could not load this</p>
+      <div className="space-y-1.5">
+        <p className="text-xs font-bold uppercase tracking-cap text-ink">Could not load this</p>
         <p className="mx-auto max-w-md text-xs leading-relaxed text-ink-faint">{message}</p>
       </div>
       {onRetry && (
@@ -96,7 +96,7 @@ export function Banner({ tone = 'info', title, children, icon, action, onDismiss
     >
       <Icon size={15} className={cn('mt-px shrink-0', t.text)} aria-hidden />
       <div className="min-w-0 flex-1 space-y-1">
-        {title && <p className="text-xs font-semibold text-ink">{title}</p>}
+        {title && <p className="text-2xs font-bold uppercase tracking-micro text-ink">{title}</p>}
         {children && <div className="text-xs leading-relaxed text-ink-dim">{children}</div>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
@@ -185,14 +185,14 @@ function Toast({ toast, onDismiss }) {
   return (
     <div
       className={cn(
-        'pointer-events-auto flex animate-fade-in items-start gap-2.5 rounded-card border bg-raised/95 px-3.5 py-3 shadow-pop backdrop-blur',
+        'pointer-events-auto flex animate-fade-in items-start gap-2.5 rounded-card border bg-raised px-3.5 py-3',
         t.border,
       )}
       role="status"
     >
       <Icon size={15} className={cn('mt-px shrink-0', t.text)} aria-hidden />
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold text-ink">{toast.title}</p>
+        <p className="text-2xs font-bold uppercase tracking-micro text-ink">{toast.title}</p>
         {toast.body && <p className="mt-0.5 text-2xs leading-relaxed text-ink-dim">{toast.body}</p>}
       </div>
       <button

@@ -11,11 +11,11 @@ export function AuthLayout() {
   return (
     <div className="flex min-h-screen bg-base">
       <div className="flex w-full flex-col lg:w-[27rem] xl:w-[30rem]">
-        <header className="flex h-14 shrink-0 items-center justify-between px-6">
+        <header className="flex h-[4.5rem] shrink-0 items-center justify-between px-6">
           <Brand />
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-2xs text-ink-faint transition-colors hover:text-ink-dim"
+            className="inline-flex items-center gap-1.5 text-2xs font-bold uppercase tracking-micro text-ink-faint transition-colors hover:text-ink"
           >
             <ArrowLeft size={12} aria-hidden />
             Back to site
@@ -34,12 +34,11 @@ export function AuthLayout() {
         </footer>
       </div>
 
-      <aside className="relative hidden min-w-0 flex-1 overflow-hidden border-l border-line bg-surface lg:block">
-        <div className="starfield absolute inset-0 bg-radial-fade" aria-hidden />
-        <div className="absolute inset-0 bg-grid-faint bg-grid opacity-40" aria-hidden />
-        <div className="relative flex h-full flex-col justify-center gap-8 px-12 xl:px-16">
-          <div className="space-y-4">
-            <h2 className="max-w-md text-2xl font-semibold leading-snug tracking-[-0.02em] text-ink">
+      <aside className="relative hidden min-w-0 flex-1 overflow-hidden border-l border-line-strong bg-base lg:block">
+        <div className="starfield absolute inset-0" aria-hidden />
+        <div className="relative flex h-full flex-col justify-center gap-10 px-12 xl:px-16">
+          <div className="space-y-5">
+            <h2 className="max-w-lg text-[2.25rem] leading-[1.1] text-ink xl:text-[2.75rem]">
               Predictions you can check, with the working shown.
             </h2>
             <p className="max-w-md text-sm leading-relaxed text-ink-dim">
@@ -49,7 +48,7 @@ export function AuthLayout() {
             </p>
           </div>
 
-          <ul className="max-w-md space-y-3.5">
+          <ul className="max-w-md divide-y divide-line-strong border-y border-line-strong">
             {[
               [
                 'Four visibility clauses, evaluated separately',
@@ -64,11 +63,11 @@ export function AuthLayout() {
                 'Computed values are labelled computed. Magnitudes are labelled estimates. Cached figures carry their age.',
               ],
             ].map(([title, body]) => (
-              <li key={title} className="flex gap-3">
-                <ShieldCheck size={15} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+              <li key={title} className="flex gap-3.5 py-4">
+                <ShieldCheck size={15} className="mt-0.5 shrink-0 text-ink" aria-hidden />
                 <div>
-                  <p className="text-xs font-semibold text-ink">{title}</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-ink-faint">{body}</p>
+                  <p className="text-2xs font-bold uppercase tracking-micro text-ink">{title}</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-ink-faint">{body}</p>
                 </div>
               </li>
             ))}

@@ -42,7 +42,7 @@ function NoAccess({ capability, roleNeeded, currentRole }) {
             <Lock size={18} aria-hidden />
           </span>
           <div className="space-y-1.5">
-            <h1 className="text-lg font-semibold text-ink">This area needs a different role</h1>
+            <h1 className="text-xl text-ink">This area needs a different role</h1>
             <p className="text-sm leading-relaxed text-ink-dim">
               Your account is {/^[AEIOU]/i.test(currentRole) ? 'an' : 'a'}{' '}
               <span className="text-ink">{currentRole}</span>. This area is part of

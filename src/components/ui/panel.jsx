@@ -14,17 +14,17 @@ export function PanelHeader({ title, subtitle, icon: Icon, actions, className, c
   return (
     <header
       className={cn(
-        'flex flex-wrap items-start justify-between gap-3 border-b border-line px-4 py-3',
+        'flex flex-wrap items-start justify-between gap-3 border-b border-line px-4 py-3.5',
         className,
       )}
     >
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           {Icon && <Icon size={14} className="shrink-0 text-ink-faint" aria-hidden />}
-          <h2 className="truncate text-sm font-semibold text-ink">{title}</h2>
+          <h2 className="truncate font-sans text-cap text-ink">{title}</h2>
         </div>
         {subtitle && (
-          <p className="mt-1 break-words text-xs leading-relaxed text-ink-faint">{subtitle}</p>
+          <p className="mt-1.5 break-words text-xs leading-relaxed text-ink-faint">{subtitle}</p>
         )}
         {children}
       </div>
@@ -39,22 +39,42 @@ export function PanelBody({ className, children, padded = true }) {
 
 export function PanelFooter({ className, children }) {
   return (
-    <footer className={cn('flex items-center gap-3 border-t border-line bg-base/40 px-4 py-2.5', className)}>
+    <footer className={cn('flex items-center gap-3 border-t border-line bg-base px-4 py-2.5', className)}>
       {children}
     </footer>
   );
 }
 
-/** A labelled block of page content with an optional description. */
-export function Section({ title, description, actions, className, children, id }) {
+/**
+ * A labelled block of page content with an optional description. `large` is
+ * the marketing size: a display-tier heading for the landing page bands.
+ */
+export function Section({ title, description, actions, className, children, id, large }) {
   return (
-    <section id={id} className={cn('space-y-3', className)}>
+    <section id={id} className={cn(large ? 'space-y-8' : 'space-y-4', className)}>
       {(title || actions) && (
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            {title && <h2 className="text-base font-semibold text-ink">{title}</h2>}
+            {title && (
+              <h2
+                className={cn(
+                  'text-ink',
+                  large ? 'text-[2rem] leading-[1.15] sm:text-display-lg' : 'text-xl leading-tight',
+                )}
+              >
+                {title}
+              </h2>
+            )}
             {description && (
-              <p className="mt-1 max-w-2xl text-xs leading-relaxed text-ink-faint">{description}</p>
+              <p
+                className={cn(
+                  'max-w-2xl leading-relaxed',
+                  // text-[1rem], never text-base: "base" is also a colour token.
+                  large ? 'mt-4 text-sm text-ink-dim sm:text-[1rem]' : 'mt-1.5 text-xs text-ink-faint',
+                )}
+              >
+                {description}
+              </p>
             )}
           </div>
           {actions && <div className="flex items-center gap-2">{actions}</div>}
@@ -84,13 +104,18 @@ export function StatTile({
 }) {
   const t = TONES[tone] ?? TONES.default;
   return (
-    <div className={cn('panel flex flex-col gap-1 p-3.5', className)}>
+    <div className={cn('panel flex flex-col gap-1.5 p-4', className)}>
       <div className="flex items-center justify-between gap-2">
         <span className="label-caps truncate">{label}</span>
         {Icon && <Icon size={14} className={cn('shrink-0', tone === 'default' ? 'text-ink-faint' : t.text)} aria-hidden />}
       </div>
       <div className="flex items-baseline gap-1.5">
-        <span className={cn('tnum font-mono text-xl font-semibold leading-none', tone === 'default' ? 'text-ink' : t.text)}>
+        <span
+          className={cn(
+            'tnum font-display text-2xl font-bold leading-none tracking-display',
+            tone === 'default' ? 'text-ink' : t.text,
+          )}
+        >
           {value}
         </span>
         {unit && <span className="text-xs text-ink-faint">{unit}</span>}
@@ -129,7 +154,7 @@ export function KeyValue({ rows, columns = 1, className, dense }) {
           <div
             key={row.label}
             className={cn(
-              'flex items-baseline justify-between gap-4 border-b border-line/60 pb-1.5 last:border-0',
+              'flex items-baseline justify-between gap-4 border-b border-line pb-1.5 last:border-0',
               row.wide && 'sm:col-span-2 lg:col-span-3',
             )}
           >
@@ -150,7 +175,7 @@ export function KeyValue({ rows, columns = 1, className, dense }) {
 }
 
 /** Horizontal bar for a 0..1 quantity. */
-export function Meter({ value, tone = 'primary', label, right, className, height = 'h-1.5' }) {
+export function Meter({ value, tone = 'primary', label, right, className, height = 'h-1' }) {
   const pct = clamp(Number(value) || 0, 0, 1) * 100;
   const t = TONES[tone] ?? TONES.primary;
   return (
@@ -176,7 +201,7 @@ export function SegmentBar({ segments, className }) {
   const total = segments.reduce((n, s) => n + s.value, 0) || 1;
   return (
     <div className={cn('space-y-2', className)}>
-      <div className="flex h-2 w-full overflow-hidden rounded-full bg-overlay">
+      <div className="flex h-1.5 w-full gap-px overflow-hidden rounded-full bg-overlay">
         {segments.map((s) => (
           <div
             key={s.label}
@@ -202,17 +227,17 @@ export function SegmentBar({ segments, className }) {
 /** Page title block with breadcrumb slot and actions. */
 export function PageHeader({ title, description, actions, meta, breadcrumb, icon: Icon, className }) {
   return (
-    <header className={cn('space-y-3', className)}>
+    <header className={cn('space-y-4', className)}>
       {breadcrumb}
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex items-center gap-2.5">
+        <div className="min-w-0 space-y-2">
+          <div className="flex items-center gap-3">
             {Icon && (
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-line bg-surface text-primary">
-                <Icon size={16} aria-hidden />
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-card border border-line-strong text-ink">
+                <Icon size={18} aria-hidden />
               </span>
             )}
-            <h1 className="truncate text-xl font-semibold tracking-[-0.015em] text-ink">{title}</h1>
+            <h1 className="truncate text-2xl leading-[1.1] text-ink sm:text-3xl">{title}</h1>
           </div>
           {description && (
             <p className="max-w-3xl text-sm leading-relaxed text-ink-dim">{description}</p>

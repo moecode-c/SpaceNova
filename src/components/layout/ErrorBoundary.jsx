@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component {
               <CircleAlert size={18} aria-hidden />
             </span>
             <div className="space-y-1.5">
-              <h1 className="text-lg font-semibold text-ink">This screen failed to render</h1>
+              <h1 className="text-xl text-ink">This screen failed to render</h1>
               <p className="text-sm leading-relaxed text-ink-dim">
                 Something in this view threw an error. The rest of the application is unaffected,
                 and nothing you had saved is lost.
@@ -45,7 +45,7 @@ export class ErrorBoundary extends Component {
             </div>
           </div>
 
-          <pre className="overflow-x-auto rounded-md border border-line bg-void px-3 py-2.5 font-mono text-2xs leading-relaxed text-ink-faint">
+          <pre className="overflow-x-auto rounded-md border border-line bg-void px-3 py-2.5 font-code text-2xs leading-relaxed text-ink-faint">
             {String(error?.message ?? error)}
           </pre>
 

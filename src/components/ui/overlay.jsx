@@ -40,24 +40,20 @@ export function Modal({ open, onClose, title, description, children, footer, siz
 
   return createPortal(
     <div className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto p-4 sm:items-center sm:p-6">
-      <div
-        className="fixed inset-0 bg-void/80 backdrop-blur-[2px]"
-        onClick={onClose}
-        aria-hidden
-      />
+      <div className="fixed inset-0 bg-void/85" onClick={onClose} aria-hidden />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={title}
         className={cn(
-          'relative w-full animate-scale-in rounded-card border border-line-strong bg-raised shadow-pop',
+          'relative w-full animate-scale-in rounded-card border border-line-strong bg-raised',
           width,
           className,
         )}
       >
-        <header className="flex items-start justify-between gap-4 border-b border-line px-4 py-3">
+        <header className="flex items-start justify-between gap-4 border-b border-line px-4 py-3.5">
           <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-ink">{title}</h2>
+            <h2 className="font-sans text-cap text-ink">{title}</h2>
             {description && (
               <p className="mt-1 text-xs leading-relaxed text-ink-faint">{description}</p>
             )}
@@ -66,7 +62,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
         </header>
         <div className="max-h-[70vh] overflow-y-auto px-4 py-4">{children}</div>
         {footer && (
-          <footer className="flex items-center justify-end gap-2 border-t border-line bg-base/40 px-4 py-3">
+          <footer className="flex items-center justify-end gap-2 border-t border-line px-4 py-3">
             {footer}
           </footer>
         )}
@@ -83,26 +79,26 @@ export function Drawer({ open, onClose, title, description, children, footer, wi
 
   return createPortal(
     <div className="fixed inset-0 z-[80]">
-      <div className="absolute inset-0 bg-void/70 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
+      <div className="absolute inset-0 bg-void/80" onClick={onClose} aria-hidden />
       <aside
         role="dialog"
         aria-modal="true"
         aria-label={title}
         className={cn(
-          'absolute right-0 top-0 flex h-full max-w-[calc(100vw-2rem)] flex-col border-l border-line-strong bg-raised shadow-pop',
+          'absolute right-0 top-0 flex h-full max-w-[calc(100vw-2rem)] flex-col border-l border-line-strong bg-raised',
           width,
         )}
       >
-        <header className="flex items-start justify-between gap-4 border-b border-line px-4 py-3">
+        <header className="flex items-start justify-between gap-4 border-b border-line px-4 py-3.5">
           <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-ink">{title}</h2>
+            <h2 className="font-sans text-cap text-ink">{title}</h2>
             {description && <p className="mt-1 text-xs text-ink-faint">{description}</p>}
           </div>
           <IconButton icon={X} label="Close" size="sm" onClick={onClose} />
         </header>
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">{children}</div>
         {footer && (
-          <footer className="flex items-center justify-end gap-2 border-t border-line bg-base/40 px-4 py-3">
+          <footer className="flex items-center justify-end gap-2 border-t border-line px-4 py-3">
             {footer}
           </footer>
         )}
@@ -172,7 +168,7 @@ export function Dropdown({ trigger, children, align = 'right', className, width 
         <div
           role="menu"
           className={cn(
-            'absolute z-50 mt-1.5 animate-scale-in overflow-hidden rounded-card border border-line-strong bg-raised py-1 shadow-pop',
+            'absolute z-50 mt-1.5 animate-scale-in overflow-hidden rounded-card border border-line-strong bg-raised py-1',
             width,
             align === 'right' ? 'right-0' : 'left-0',
           )}
@@ -193,10 +189,10 @@ export function MenuItem({ icon: Icon, children, onClick, danger, disabled, hint
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        'flex w-full items-center gap-2.5 px-3 py-1.5 text-left text-xs transition-colors',
+        'flex w-full items-center gap-2.5 px-3 py-2 text-left text-xs transition-colors',
         'disabled:pointer-events-none disabled:opacity-40',
-        danger ? 'text-bad hover:bg-bad-soft/60' : 'text-ink-dim hover:bg-overlay hover:text-ink',
-        active && 'bg-primary-soft/40 text-primary-bright',
+        danger ? 'text-bad hover:bg-bad-soft' : 'text-ink-dim hover:bg-overlay hover:text-ink',
+        active && 'bg-overlay text-ink',
       )}
     >
       {Icon && <Icon size={13} className="shrink-0" aria-hidden />}
@@ -207,7 +203,7 @@ export function MenuItem({ icon: Icon, children, onClick, danger, disabled, hint
 }
 
 export function MenuLabel({ children }) {
-  return <p className="px-3 py-1.5 text-2xs font-semibold uppercase tracking-[0.1em] text-ink-faint">{children}</p>;
+  return <p className="label-caps px-3 py-1.5">{children}</p>;
 }
 
 export function MenuSeparator() {
@@ -239,7 +235,7 @@ export function Tooltip({ label, children, side = 'top', className }) {
         <span
           role="tooltip"
           className={cn(
-            'pointer-events-none absolute z-[70] w-max max-w-[16rem] animate-fade-in rounded-md border border-line-strong bg-raised px-2.5 py-1.5 text-2xs leading-relaxed text-ink-dim shadow-pop',
+            'pointer-events-none absolute z-[70] w-max max-w-[16rem] animate-fade-in rounded-card border border-line-strong bg-raised px-2.5 py-1.5 text-2xs leading-relaxed text-ink-dim',
             position,
           )}
         >

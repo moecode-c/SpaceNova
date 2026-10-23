@@ -35,7 +35,7 @@ export function DataTable({
     <div className={cn('w-full overflow-x-auto', className)}>
       <table className="w-full min-w-full border-collapse text-left">
         <thead className={cn(stickyHeader && 'sticky top-0 z-10')}>
-          <tr className="border-b border-line bg-surface">
+          <tr className="border-b border-line-strong bg-surface">
             {columns.map((col) => {
               const active = sort === col.key;
               const Icon = !active ? ChevronsUpDown : direction === 'asc' ? ArrowUp : ArrowDown;
@@ -60,7 +60,7 @@ export function DataTable({
                       onClick={() => onSort(col.key)}
                       className={cn(
                         'inline-flex items-center gap-1.5 transition-colors hover:text-ink',
-                        active && 'text-primary-bright',
+                        active && 'text-ink',
                         col.align === 'right' && 'flex-row-reverse',
                       )}
                     >
@@ -78,7 +78,7 @@ export function DataTable({
         <tbody>
           {loading
             ? Array.from({ length: loadingRows }).map((_, i) => (
-                <tr key={`skeleton-${i}`} className="border-b border-line/60">
+                <tr key={`skeleton-${i}`} className="border-b border-line">
                   {columns.map((col) => (
                     <td key={col.key} className={cellPadding}>
                       <Skeleton className="h-3.5 w-full max-w-[12rem]" />
@@ -91,8 +91,8 @@ export function DataTable({
                   key={rowKey(row)}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
                   className={cn(
-                    'border-b border-line/60 transition-colors last:border-0',
-                    onRowClick && 'cursor-pointer hover:bg-overlay/50',
+                    'border-b border-line transition-colors last:border-0',
+                    onRowClick && 'cursor-pointer hover:bg-overlay',
                   )}
                 >
                   {columns.map((col) => (
@@ -195,10 +195,10 @@ export function FilterChips({ options, selected = [], onToggle, label, className
             aria-pressed={active}
             onClick={() => onToggle(option.value)}
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-2xs transition-colors',
+              'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-2xs font-semibold uppercase tracking-micro transition-colors',
               active
-                ? 'border-primary-dim bg-primary-soft/60 text-primary-bright'
-                : 'border-line bg-base/60 text-ink-faint hover:border-line-strong hover:text-ink-dim',
+                ? 'border-cool bg-cool text-black'
+                : 'border-line-strong text-ink-faint hover:border-ink hover:text-ink',
             )}
           >
             {option.label}

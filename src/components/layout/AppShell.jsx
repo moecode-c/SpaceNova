@@ -55,7 +55,7 @@ export function AppShell() {
       {/* Mobile scrim */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-void/70 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-void/80 lg:hidden"
           onClick={() => setMobileOpen(false)}
           aria-hidden
         />
@@ -98,7 +98,7 @@ function Sidebar({ groups, collapsed, mobileOpen, onCloseMobile }) {
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-line bg-surface transition-[width,transform] duration-200',
+        'fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-line-strong bg-base transition-[width,transform] duration-200',
         collapsed ? 'lg:w-[4.25rem]' : 'lg:w-60',
         'w-64 lg:static lg:translate-x-0',
         mobileOpen ? 'translate-x-0' : '-translate-x-full',
@@ -106,7 +106,7 @@ function Sidebar({ groups, collapsed, mobileOpen, onCloseMobile }) {
     >
       <div
         className={cn(
-          'flex h-14 shrink-0 items-center border-b border-line',
+          'flex h-14 shrink-0 items-center border-b border-line-strong',
           collapsed ? 'lg:justify-center lg:px-0' : 'px-4',
         )}
       >
@@ -118,7 +118,7 @@ function Sidebar({ groups, collapsed, mobileOpen, onCloseMobile }) {
         {groups.map((group) => (
           <div key={group.id} className="space-y-1">
             {!collapsed && <p className="label-caps px-2 pb-1">{group.label}</p>}
-            {collapsed && <div className="mx-auto mb-1 h-px w-5 bg-line" aria-hidden />}
+            {collapsed && <div className="mx-auto mb-1 h-px w-5 bg-line-strong" aria-hidden />}
             {group.items.map((item) => (
               <NavLink
                 key={item.to}
@@ -127,18 +127,18 @@ function Sidebar({ groups, collapsed, mobileOpen, onCloseMobile }) {
                 title={collapsed ? item.label : undefined}
                 className={({ isActive }) =>
                   cn(
-                    'group relative flex items-center gap-2.5 rounded-md py-2 text-xs font-medium transition-colors',
+                    'group relative flex items-center gap-2.5 rounded-card py-2.5 text-2xs font-bold uppercase tracking-micro transition-colors',
                     collapsed ? 'justify-center px-0' : 'px-2.5',
                     isActive
-                      ? 'bg-primary-soft/50 text-primary-bright'
-                      : 'text-ink-faint hover:bg-overlay/60 hover:text-ink-dim',
+                      ? 'bg-overlay text-ink'
+                      : 'text-ink-faint hover:bg-overlay hover:text-ink',
                   )
                 }
               >
                 {({ isActive }) => (
                   <>
                     {isActive && !collapsed && (
-                      <span className="absolute -left-2.5 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-primary" aria-hidden />
+                      <span className="absolute -left-2.5 top-1/2 h-5 w-0.5 -translate-y-1/2 bg-ink" aria-hidden />
                     )}
                     <item.icon size={15} className="shrink-0" aria-hidden />
                     {!collapsed && <span className="min-w-0 truncate">{item.label}</span>}
@@ -175,7 +175,7 @@ function FixtureFooter({ collapsed }) {
 
   if (collapsed) {
     return (
-      <div className="hidden shrink-0 border-t border-line p-2 lg:block">
+      <div className="hidden shrink-0 border-t border-line-strong p-2 lg:block">
         <Tooltip label="Phase 1 fixture data. Rebuild the fixtures." side="right">
           <IconButton icon={RefreshCw} label="Rebuild fixtures" size="sm" onClick={reset} disabled={resetting} />
         </Tooltip>
@@ -184,10 +184,10 @@ function FixtureFooter({ collapsed }) {
   }
 
   return (
-    <div className="shrink-0 space-y-2 border-t border-line p-3">
+    <div className="shrink-0 space-y-2 border-t border-line-strong p-3">
       <div className="flex items-center gap-2">
         <StatusDot tone="warn" />
-        <p className="text-2xs font-medium text-ink-dim">Phase 1, fixture data</p>
+        <p className="text-2xs font-bold uppercase tracking-micro text-ink-dim">Phase 1, fixture data</p>
       </div>
       <p className="text-2xs leading-relaxed text-ink-faint">
         No back end is connected. Orbital figures are computed locally from synthetic element sets.
@@ -210,7 +210,7 @@ function TopBar({ onToggleSidebar, onOpenMobile, collapsed }) {
   });
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-line bg-base/90 px-3 backdrop-blur sm:px-4">
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-line-strong bg-base px-3 sm:px-4">
       <IconButton icon={Menu} label="Open navigation" size="sm" className="lg:hidden" onClick={onOpenMobile} />
       <IconButton
         icon={collapsed ? PanelLeftOpen : PanelLeftClose}
@@ -223,7 +223,7 @@ function TopBar({ onToggleSidebar, onOpenMobile, collapsed }) {
       {/* Sky conditions at the active location: the single most useful thing an
           observer wants to know before anything else loads. */}
       {sky.data && (
-        <div className="hidden items-center gap-2 rounded-md border border-line bg-surface px-2.5 py-1.5 md:flex">
+        <div className="hidden items-center gap-2 rounded-full border border-line-strong px-3 py-1.5 md:flex">
           {sky.data.dark ? (
             <Moon size={13} className="text-info" aria-hidden />
           ) : (
@@ -243,7 +243,7 @@ function TopBar({ onToggleSidebar, onOpenMobile, collapsed }) {
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
         <Tooltip label="Coordinated Universal Time. Every stored timestamp is UTC.">
-          <span className="tnum hidden items-center gap-1.5 rounded-md border border-line bg-surface px-2.5 py-1.5 font-mono text-xs text-ink-dim sm:flex">
+          <span className="tnum hidden items-center gap-1.5 rounded-full border border-line-strong px-3 py-1.5 font-mono text-xs text-ink-dim sm:flex">
             {clockUTC(now)}
             <span className="text-2xs text-ink-faint">UTC</span>
           </span>
@@ -324,7 +324,7 @@ function TopBar({ onToggleSidebar, onOpenMobile, collapsed }) {
           trigger={
             <button
               type="button"
-              className="flex items-center gap-2 rounded-md border border-line-strong bg-overlay px-2 py-1.5 transition-colors hover:bg-line-strong"
+              className="flex items-center gap-2 rounded-full border border-line-strong py-1 pl-1 pr-3 transition-colors hover:border-ink"
             >
               <Avatar name={user?.name} size="sm" />
               <span className="hidden min-w-0 flex-col items-start leading-tight sm:flex">
